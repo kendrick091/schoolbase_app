@@ -1,0 +1,53 @@
+/* ====== STUDENT TABLE STYLING ====== */
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 30px;
+    background-color: #fff;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border-radius: 10px;
+    overflow: hidden;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* Table Header */
+table thead {
+    background-color: #1e88e5;
+    color: white;
+}
+
+table th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+/* Table Body Rows */
+table td {
+    padding: 14px 12px;
+    font-size: 14px;
+    color: #333;
+    border-bottom: 1px solid #eee;
+}
+
+/* Zebra stripes */
+table tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Hover effect */
+table tbody tr:hover {
+    background-color: #92aabb;
+    cursor: pointer;
+}
+
+
+table input{
+    border-radius: 14px;
+    padding: 5px;
+    font-size: 13px;
+    border: none;
+}

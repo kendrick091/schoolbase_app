@@ -1,0 +1,6 @@
+/* Example: Highlight the dashboard section if needed */
+.dashOptions .title h2 {
+    color: #2c3e50;
+}
+
+/* You can override styles here if needed */

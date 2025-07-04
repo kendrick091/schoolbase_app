@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>class INFO</title>
+    <link rel="stylesheet" href="styleGpt.css">
+    <link rel="stylesheet" href="form.css">
+    <link rel="stylesheet" href="table.css">
+    <link rel="stylesheet" href="classAttendance.css">
+</head>
+<body>
+    <div class="container">
+        <!-- dashbord page top bar-->
+        <div class="schoolbase" id="schoolbase">
+            <h3 id="schoolName">School Base</h3>
+            <h1>SCHOOL MANAGEMENT SYSTEM</h1>
+        </div>
+
+        <div class="contentBody">
+            <!---- Nav bar --------->
+            <nav class="navSide">
+                <ul id="navUl">
+                    <!---- from nav.js-->
+                </ul>
+            </nav>
+
+            <!----- Dash BOARD BODY ------>
+            <div class="dashOptions">
+                <div class="title">
+                    <h2><span id="selectedClassName"></span> Class 2nd term Attendance3</h2>
+                </div>
+                <div class="tableDiv">
+                    <div class="register-div">
+                        <button id="takeAttendance3">Take Class Attendance3</button>
+                        <div id="registerFormDiv" class="addForm">
+                            <button class="dismise" id="dismise"><h3>close</h3></button>
+                            <form id="registerSubjectForm">
+                                <div class="checkboxContainer" id="checkboxContainer">
+                                    <!----- attendance3.js code ------>
+                                </div>
+                                <input type="submit" id="submitAttendance3" value="Submit">
+                            </form>
+                        </div>
+                    </div>
+                    <div id="attInfo" class="attInfo">
+                        <table id="attendance3Combined">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Rendered by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+    </div>
+    </div>
+    </div>
+    <script type="module" src="classAttendance3.js"></script>
+    <script src="nav.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

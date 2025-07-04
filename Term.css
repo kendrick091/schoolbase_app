@@ -1,0 +1,24 @@
+button{
+    padding: 4px 9px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.registerFormDiv{
+    border: 1px solid rgba(89, 154, 180, 0.89);
+    background: rgba(89, 154, 180, 0.89);
+    border-radius: 20px;
+    padding: 17px;
+    position: absolute;
+    top: 30vh;
+    display: none;
+}
+
+.checkboxContainer{
+    width: 200px;
+}
+
+.checkboxContainer input[type="checkbox"]{
+    width: 15%;
+}

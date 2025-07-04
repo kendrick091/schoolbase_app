@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>subject Dashboard</title>
+    <link rel="stylesheet" href="styleGpt.css">
+    <link rel="stylesheet" href="form.css">
+    <link rel="stylesheet" href="table.css">
+    <link rel="stylesheet" href="subject.css">
+</head>
+<body>
+    <div class="container">
+        <!-- dashbord page top bar-->
+        <div class="schoolbase" id="schoolbase">
+            <h3 id="schoolName">School Base</h3>
+            <h1>SCHOOL MANAGEMENT SYSTEM</h1>
+        </div>
+
+        <div class="contentBody">
+            <!---- Nav bar --------->
+            <nav class="navSide">
+                <ul id="navUl">
+                    <!---- from nav.js-->
+                </ul>
+            </nav>
+            <!----- Dash BOARD BODY ------>
+            <div class="dashOptions">
+                <div class="title">
+                    <h2>SUBJECTS</h2>
+                </div>
+                <div class="optionSubject">
+                    <div class="addSubject">
+                        <div class="subjectInfo">
+                            <button class="fill-btn" id="addSubjectBtn">ADD SUBJECT</button>
+                            <div class="addForm" id="toggleFormAddForm">
+                                <button class="dismise" id="dismise"><h3>close</h3></button>
+                                <h2>INPUT SUBJECT</h2>
+                                <form id="formInput">
+                                    <input type="text" id="subjectName">
+                                    <button type="submit">SAVE</button>
+                                </form>
+                            </div>
+                        </div>
+                            <table id="subject-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>SUBJECTS</th>
+                                        <th>ACTION</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!---- subject.js table code-->
+                                </tbody>
+                            </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="subject.js"></script>
+    <script src="nav.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

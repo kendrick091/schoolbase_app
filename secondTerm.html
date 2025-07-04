@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>class INFO</title>
+    <link rel="stylesheet" href="styleGpt.css">
+    <link rel="stylesheet" href="form.css">
+    <link rel="stylesheet" href="table.css">
+    <link rel="stylesheet" href="Term.css">
+</head>
+<body>
+    <div class="container">
+        <!-- dashbord page top bar-->
+        <div class="schoolbase" id="schoolbase">
+            <h3 id="schoolName">School Base</h3>
+            <h1>SCHOOL MANAGEMENT SYSTEM</h1>
+        </div>
+
+        <div class="contentBody">
+            <!---- Nav bar --------->
+            <nav class="navSide">
+                <ul id="navUl">
+                    <!---- from nav.js-->
+                </ul>
+            </nav>
+
+            <!----- Dash BOARD BODY ------>
+            <div class="dashOptions">
+                <div class="title">
+                    <h2><span id="studentName"></span> Second Term Result</h2>
+                </div>
+                <div class="tableDiv">
+                    <div class="register-div">
+                        <p>Register subject</p>
+                        <div class="register-subject">
+                            <button id="regSubject">Register Subject</button>
+                        </div>
+                        <div id="registerFormDiv" class="registerFormDiv">
+                            <code><p>NOTE: <i>After registering subject go back to previous page
+                                to see what you've added</i></p>
+                            </code>
+                            <button class="dismise" id="dismise"><h3>close</h3></button>
+                            <form id="registerSubjectForm">
+                                <div class="checkboxContainer" id="checkboxContainer">
+                                    <!----- SecondTerm.js code ------>
+                                </div>
+                                <input type="submit" id="submitSubjects">
+                            </form>
+                        </div>
+                    </div>
+                    <table id="student-secondTerm">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Subject</th>
+                                <th>CA 1</th>
+                                <th>CA 2</th>
+                                <th>CA 3</th>
+                                <th>CA 4</th>
+                                <th>CA Total</th>
+                                <th>Exam</th>
+                                <th>Grand Total</th>
+                                <th>Grade</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!------ code from classStudent.js ----->
+                        </tbody>
+                    </table>
+                </div>
+    </div>
+    </div>
+    </div>
+    <script type="module" src="secondTerm.js"></script>
+    <script src="nav.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

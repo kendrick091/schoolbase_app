@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEACHERS</title>
+    <link rel="stylesheet" href="styleGpt.css">
+    <link rel="stylesheet" href="form.css">
+    <link rel="stylesheet" href="table.css">
+    <link rel="stylesheet" href="classes.css">
+</head>
+<body>
+    <div class="container">
+        <!-- dashbord page top bar-->
+        <div class="schoolbase" id="schoolbase">
+            <h3 id="schoolName">School Base</h3>
+            <h1>SCHOOL MANAGEMENT SYSTEM</h1>
+        </div>
+
+        <div class="contentBody">
+            <!---- Nav bar --------->
+            <nav class="navSide">
+                <ul id="navUl">
+                    <!---- from nav.js-->
+                </ul>
+            </nav>
+
+            <!----- Dash BOARD BODY ------>
+            <div class="dashOptions">
+                <div class="title">
+                    <h2>CLASSES</h2>
+                </div>
+                <div class="teachersDivs">
+                    <div class="addDiv">
+                        <button class="btn" id="addClass">ADD CLASS</button>
+                        <div class="addForm" id="toggleFormAddForm">
+                            <button class="dismise" id="dismise"><h3>close</h3></button>
+                            <h2>INPUT CLASS</h2>
+                        <form id="formInput">
+                            <input type="text" id="classInput" placeholder="ADD CLASS"><br>
+                            <button type="submit">SAVE</button>
+                        </form>
+                        </div>
+                        <ul id="listClass" class="listClass">
+                            <!---- from teacher.js code--- -->
+                        </ul>
+                        <div id="editDiv" class="editDiv">
+                            <button class="dismise" id="dismiseEdit"><h3>close</h3></button>
+                            <h2>Edit Class</h2>
+                            <form class="editForm" id="editForm">
+                                <input type="hidden" id="classId">
+                                <label for="classEdit">Class: </label>
+                                <input type="text" id="classEdit">
+                                <input type="submit" id="" value="SAVE">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="classes.js"></script>
+    <script src="nav.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

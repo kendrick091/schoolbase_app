@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>class INFO</title>
+    <link rel="stylesheet" href="styleGpt.css">
+    <link rel="stylesheet" href="form.css">
+    <link rel="stylesheet" href="table.css">
+</head>
+<body>
+    <div class="container">
+        <!-- dashbord page top bar-->
+        <div class="schoolbase" id="schoolbase">
+            <h3 id="schoolName">School Base</h3>
+            <h1>SCHOOL MANAGEMENT SYSTEM</h1>
+        </div>
+
+        <div class="contentBody">
+            <!---- Nav bar --------->
+            <nav class="navSide">
+                <ul id="navUl">
+                    <!---- from nav.js-->
+                </ul>
+            </nav>
+
+            <!----- Dash BOARD BODY ------>
+            <div class="dashOptions">
+                <div class="title">
+                    <h2><span id="selectedClass"></span> INFO</h2>
+                </div>
+                <div class="tableDiv">
+                    <div id="amountOfStudent"></div>
+                    <table id="student-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Sur Name</th>
+                                <th>Other Name</th>
+                                <th>Action</th>
+                                <!-- <th>Sur Name</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!------ code from classStudent.js ----->
+                        </tbody>
+                    </table>
+                </div>
+    </div>
+    </div>
+    </div>
+    <script type="module" src="classStudent.js"></script>
+    <script src="nav.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>classes Dashboard</title>
+    <link rel="stylesheet" href="styleGpt.css">
+    <link rel="stylesheet" href="form.css">
+    <link rel="stylesheet" href="table.css">
+    <link rel="stylesheet" href="student.css">
+</head>
+<body>
+    <div class="container">
+        <!-- dashbord page top bar-->
+        <div class="schoolbase" id="schoolbase">
+            <h3 id="schoolName">School Base</h3>
+            <h1>SCHOOL MANAGEMENT SYSTEM</h1>
+        </div>
+
+        <div class="contentBody">
+            <!---- Nav bar --------->
+            <nav class="navSide">
+                <ul id="navUl" class="navUl">
+                    <!---- from nav.js-->
+                </ul>
+            </nav>
+
+            <!----- Dash BOARD BODY ------>
+            <div class="dashOptions">
+                <div class="title">
+                    <h2>STUDENT</h2>
+                </div>
+                <div class="classesDivs">
+                    <div class="addDiv">
+                        <button class="btn" id="addStudent">ADD STUDENT</button>
+                        <div class="addForm" id="toggleFormAddForm">
+                            <button class="dismise" id="dismise"><h3>close</h3></button>
+                            <h2>INPUT STUDENT</h2>
+                        <form id="formInput">
+                            <input type="text" id="firstNameInput" placeholder=" FIRST NAME">
+                            <input type="text" id="surNameInput" placeholder="SUR NAME">
+                            <input type="text" id="otherNameInput" placeholder="OTHER NAME">
+                            <input type="text" id="phoneNumberInput" placeholder="PARENT PHONE No.">
+                            <div class="selectDiv">
+                                <legend>GENDER:</legend>
+                            <select  id="selectGender">
+                                <option value="">GENDER</option>
+                                <option value="Male">MALE</option>
+                                <option value="Female">FEMALE</option>
+                            </select><br>
+                            <legend>SELECT CLASS:</legend>
+                            <select id="selectClass">
+                                <!---- from student.js ------>
+                            </select>
+                            </div>
+                            <input type="submit" value="SAVE">
+                        </form>
+                        </div>
+                    </div>
+                     <table id="student-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>FIRST NAME</th>
+                                    <th>SUR NAME</th>
+                                    <th>OTHER NAME</th>
+                                    <th>PHONE No.</th>
+                                    <th>GENDER</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!---- subject.js table code-->
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="student.js"></script>
+    <script src="nav.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,144 @@
+/* Reset some default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Segoe UI", sans-serif;
+}
+
+/* Main Container */
+.container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #f4f7fa;
+}
+
+/* Top bar */
+.schoolbase {
+    background-color: #1e88e5;
+    color: white;
+    text-align: center;
+    padding: 20px 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.schoolbase h1 {
+    font-size: 24px;
+    letter-spacing: 1px;
+}
+
+.schoolbase h3 {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+/* Content Body (nav + dashboard) */
+.contentBody {
+    display: flex;
+    flex: 1;
+}
+
+/* Side Nav */
+.navSide {
+    width: 220px;
+    background-color: #fff;
+    border-right: 1px solid #ddd;
+    box-shadow: 2px 0 6px rgba(0,0,0,0.05);
+    padding: 20px 0;
+}
+
+.navSide ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.navSide ul li {
+    padding: 12px 24px;
+    margin: 5px 10px;
+    color: #333;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.navSide ul li button{
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.navSide ul li button:hover{
+     background-color: #45a049;
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+}
+
+.navSide ul li button:active{
+    transform: scale(0.98);
+}
+
+.navSide ul li:hover {
+    background-color: #e3f2fd;
+}
+
+/* Dashboard Panel */
+.dashOptions {
+    flex: 1;
+    padding: 30px;
+}
+
+/* Section Title */
+.title h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+    color: #333;
+}
+
+/* Info Cards */
+.infoCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 20px;
+}
+
+.infoCard {
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    font-size: 18px;
+    font-weight: 600;
+    color: #1e88e5;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.infoCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .contentBody {
+        flex-direction: column;
+    }
+
+    .navSide {
+        width: 100%;
+        border-right: none;
+        box-shadow: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .infoCards {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+}

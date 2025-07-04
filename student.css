@@ -1,0 +1,12 @@
+.optionSubject{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+button{
+    padding: 4px 9px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
