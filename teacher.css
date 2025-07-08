@@ -11,6 +11,7 @@ button{
 }
 
 .teachersList{
+    margin-top: 20px;
     width: 100%;
     list-style: none;
     display: grid;

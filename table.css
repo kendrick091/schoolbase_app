@@ -27,8 +27,8 @@ table th {
 
 /* Table Body Rows */
 table td {
-    padding: 14px 12px;
-    font-size: 14px;
+    padding: 3px 6px;
+    font-size: 13px;
     color: #333;
     border-bottom: 1px solid #eee;
 }
@@ -46,8 +46,16 @@ table tbody tr:hover {
 
 
 table input{
-    border-radius: 14px;
+    width: 60px;
+    border-radius: 10px;
     padding: 5px;
     font-size: 13px;
     border: none;
+}
+
+table button{
+    padding: 9px;
+    font-weight: bold;
+    width: 100%;
+    cursor: pointer;
 }

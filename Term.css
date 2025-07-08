@@ -1,8 +1,6 @@
-button{
-    padding: 4px 9px;
-    font-size: 20px;
-    font-weight: bold;
-    cursor: pointer;
+.split-info{
+    display: flex;
+    justify-content: space-between;
 }
 
 .registerFormDiv{

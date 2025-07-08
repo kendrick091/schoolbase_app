@@ -34,6 +34,7 @@ request.onsuccess = (event) =>{
     displayCheckbox();
     studentNameDisplay();
     displayTable();
+    attInfo();
 }
 
 function displayCheckbox(){
@@ -269,4 +270,29 @@ function displayTable(){
         else if(totalScore >= 40) return "E8";
         else if(totalScore >= 40) return "E8";
         else return "F9";
+    }
+
+    function attInfo() {
+        let transaction = db.transaction('attendance3', 'readonly');
+        let objectStore = transaction.objectStore('attendance3');
+
+        let attendanceInfo = document.getElementById('attendance3-info');
+
+        let count = 0;
+
+        objectStore.openCursor().onsuccess = (event)=>{
+            const cursor = event.target.result;
+
+            if(cursor){
+                const {id, studentID} = cursor.value;
+                if(userId == studentID){
+                    count++
+                    console.log(count)
+                    attendanceInfo.textContent = count;
+                    attendanceInfo.style.color = '#aa025f'
+                }
+                cursor.continue();
+            }
+        }
+
     }

@@ -6,6 +6,7 @@ let studentList = document.createElement('li');
 let subjectList = document.createElement('li');
 let classesList = document.createElement('li');
 let attendanceList = document.createElement('li');
+let resultList = document.createElement('li');
 
 let feesListBtn = document.createElement('button')
 let teacherListBtn = document.createElement('button')
@@ -13,14 +14,16 @@ let studentListBtn = document.createElement('button')
 let subjectListBtn = document.createElement('button')
 let classesListBtn = document.createElement('button')
 let attendanceBtn = document.createElement('button')
+let resultBtn = document.createElement('button')
 
 feesListBtn.textContent = 'FEES/Management';
-// myButton.classList.add("my-styled-button"); // Add a class
+// myButton.classList.add("animated-btn"); // Add a class
 teacherListBtn.textContent = 'TEACHERS';
 studentListBtn.textContent = 'STUDENTS';
 subjectListBtn.textContent = 'SUBJECTS';
 classesListBtn.textContent = 'CLASSES';
 attendanceBtn.textContent = 'ATTENDANCE';
+resultBtn.textContent = 'RESULT';
 
 feesList.appendChild(feesListBtn);
 classesList.appendChild(classesListBtn);
@@ -28,6 +31,7 @@ teacherList.appendChild(teacherListBtn);
 studentList.appendChild(studentListBtn);
 subjectList.appendChild(subjectListBtn);
 attendanceList.appendChild(attendanceBtn);
+resultList.appendChild(resultBtn);
 
 feesListBtn.addEventListener('click', function(){
     window.location.href = `index.html`;
@@ -53,12 +57,17 @@ attendanceBtn.addEventListener('click', function(){
     window.location.href = `attendanceEntry.html`;
 })
 
+resultBtn.addEventListener('click', function(){
+    window.location.href = `result.html`;
+})
+
 navUl.appendChild(feesList);
 navUl.appendChild(classesList)
 navUl.appendChild(teacherList)
 navUl.appendChild(subjectList)
 navUl.appendChild(studentList)
 navUl.appendChild(attendanceList)
+navUl.appendChild(resultList)
 
 // nav.js
 const links = document.querySelectorAll('.nav-link');

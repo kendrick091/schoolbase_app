@@ -12,6 +12,7 @@ button{
 }
 
 .listClass{
+    margin-top: 20px;
     width: 100%;
     list-style: none;
     display: grid;

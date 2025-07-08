@@ -34,6 +34,7 @@ request.onsuccess = (event) =>{
     displayCheckbox();
     studentNameDisplay();
     displayTable();
+    attInfo()
 }
 
 function displayCheckbox(){
@@ -101,8 +102,6 @@ function studentNameDisplay(){
             let result = cursor.value;
            
             if(result.id == userId){
-            console.log(result.id)
-            console.log(result.firstName)
             let student = document.getElementById('studentName');
             student.textContent = `${result.firstName} ${result.surName}`;
             }
@@ -129,8 +128,6 @@ function displayTable(){
         let subjectTx = db.transaction("subjectStore", "readonly");
         let subjectStore = subjectTx.objectStore("subjectStore");
         let subjectRequest = subjectStore.get(parseInt(subjectID));
-
-        console.log(subjectID)
 
         subjectRequest.onsuccess = () =>{
             const subject = subjectRequest.result;
@@ -269,4 +266,29 @@ function displayTable(){
         else if(totalScore >= 40) return "E8";
         else if(totalScore >= 40) return "E8";
         else return "F9";
+    }
+
+    function attInfo() {
+        let transaction = db.transaction('attendance', 'readonly');
+        let objectStore = transaction.objectStore('attendance');
+
+        let attendanceInfo = document.getElementById('attendance-info');
+
+        let count = 0;
+
+        objectStore.openCursor().onsuccess = (event)=>{
+            const cursor = event.target.result;
+
+            if(cursor){
+                const {id, studentID} = cursor.value;
+                if(userId == studentID){
+                    count++
+                    console.log(count)
+                    attendanceInfo.textContent = count;
+                    attendanceInfo.style.color = '#aa025f'
+                }
+                cursor.continue();
+            }
+        }
+
     }
