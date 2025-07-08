@@ -149,11 +149,6 @@ studentRequest.onsuccess = function(){
 
             row.appendChild(cellPhoneNumber);
 
-            //Editable Gender
-            const cellGender = document.createElement('td');
-            cellGender.textContent = student.gender;
-            row.appendChild(cellGender);
-
             //AddBtn
             const cellAction = document.createElement('td');
             const editBtn = document.createElement('button');

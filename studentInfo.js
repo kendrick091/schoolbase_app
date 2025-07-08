@@ -52,6 +52,10 @@ function showDetails(){
                     <td>${student.otherName}</td>
                 </tr>
                 <tr>
+                    <td>Gender:</td>
+                    <td>${student.gender}</td>
+                </tr>
+                <tr>
                     <td>Class:</td>
                     <td>${classData ? classData.className : "unknow"}</td>
                 </tr>
