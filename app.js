@@ -1,4 +1,4 @@
-export const DB_NAME = "schooldb";
+export const DB_NAME = "dbschool";
 export const DB_VERSION = 1;
 
 let db;
@@ -15,10 +15,16 @@ function openDataBase(){
             const schoolNameStore = db.createObjectStore('schoolName',{keypath: 'id', autoIncrement: false});
         }
 
+        //Session Store
+        if(!db.objectStoreNames.contains('session')){
+            const sessionStore = db.createObjectStore('session', {keyPath: 'id', autoIncrement: true});
+        }
+
         //Student Store
         if(!db.objectStoreNames.contains('students')){
             const studentStore = db.createObjectStore('students', {keyPath: 'id', autoIncrement: true});
             studentStore.createIndex('classID', 'classID', {unique: false});
+            studentStore.createIndex('sessionID','sessionID',{unique: false});
         }
 
         //Teacher store
@@ -38,16 +44,19 @@ function openDataBase(){
             const attendanceStore = db.createObjectStore('attendance', {keyPath: 'id', autoIncrement: true})
             attendanceStore.createIndex('studentID', 'studentID', {unique: false});
             attendanceStore.createIndex('date','date',{unique: false});
+            attendanceStore.createIndex('sessionID','sessionID',{unique: false});
         }
         if(!db.objectStoreNames.contains('attendance2')){
             const attendanceStore = db.createObjectStore('attendance2', {keyPath: 'id', autoIncrement: true})
             attendanceStore.createIndex('studentID', 'studentID', {unique: false});
             attendanceStore.createIndex('date','date',{unique: false});
+            attendanceStore.createIndex('sessionID','sessionID',{unique: false});
         }
         if(!db.objectStoreNames.contains('attendance3')){
             const attendanceStore = db.createObjectStore('attendance3', {keyPath: 'id', autoIncrement: true})
             attendanceStore.createIndex('studentID', 'studentID', {unique: false});
             attendanceStore.createIndex('date','date',{unique: false});
+            attendanceStore.createIndex('sessionID','sessionID',{unique: false});
         }
 
         //Subject store
@@ -59,24 +68,25 @@ function openDataBase(){
         if(!db.objectStoreNames.contains('firstTerm')){
             const firstTermStore = db.createObjectStore('firstTerm', {keyPath: 'id', autoIncrement: true});
             firstTermStore.createIndex('studentId', 'studentId', {unique: false});
-            
             firstTermStore.createIndex('subjectId', 'subjectId', {unique: false});
+            firstTermStore.createIndex('sessionID','sessionID',{unique: false});
+
         }
 
         //secondTerm store
         if(!db.objectStoreNames.contains('secondTerm')){
             const secondTermStore = db.createObjectStore('secondTerm', {keyPath: 'id', autoIncrement: true});
             secondTermStore.createIndex('studentId', 'studentId', {unique: false});
-            
             secondTermStore.createIndex('subjectId', 'subjectId', {unique: false});
+            secondTermStore.createIndex('sessionID','sessionID',{unique: false});
         }
 
         //thirdTerm store
         if(!db.objectStoreNames.contains('thirdTerm')){
             const thirdTermStore = db.createObjectStore('thirdTerm', {keyPath: 'id', autoIncrement: true});
             thirdTermStore.createIndex('studentId', 'studentId', {unique: false});
-            
             thirdTermStore.createIndex('subjectId', 'subjectId', {unique: false});
+            thirdTermStore.createIndex('sessionID','sessionID',{unique: false});
         }
     }
     request.onerror = function(event){

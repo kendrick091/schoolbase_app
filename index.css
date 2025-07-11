@@ -50,6 +50,11 @@
     color: #ef6c00;
 }
 
+.space-between{
+    display: flex;
+    justify-content: space-between;
+}
+
 /* You can override styles here if needed */
 
 

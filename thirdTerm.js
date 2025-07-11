@@ -71,6 +71,26 @@ function displayCheckbox(){
 document.getElementById('submitSubjects').addEventListener('click', function(){
     let checkboxes = document.querySelectorAll("input[name='subjectCheckbox']:checked");
 
+      if (checkboxes.length === 0) {
+        alert("No students selected.");
+        return;
+    }
+
+    // Step 1: Get latest studentsID from studentsStore
+    const studentsTx = db.transaction("students", "readonly");
+    const studentsStore = studentsTx.objectStore("students");
+    const studentsRequest = studentsStore.openCursor(null, 'prev'); // get latest students (assuming students ID is auto-incremented)
+
+    studentsRequest.onsuccess = function (event) {
+        const cursor = event.target.result;
+        if (!cursor) {
+            alert("No students available. Please create a students third.");
+            return;
+        }
+
+        const studentsID = cursor.value.studentsID; // or adjust if field name is different
+        console.log(cursor.value.sessionID)
+
     let transaction = db.transaction("thirdTerm", "readwrite");
     let store = transaction.objectStore("thirdTerm");
 
@@ -79,7 +99,7 @@ document.getElementById('submitSubjects').addEventListener('click', function(){
 
         //Save student ID into selectedStudents store
         store.add({subjectID: parseInt(subjectID), studentID: parseInt(userId),
-            ca1: 0, ca2: 0, ca3: 0, ca4: 0, exam: 0});
+            ca1: 0, ca2: 0, ca3: 0, ca4: 0, exam: 0, session: cursor.value.sessionID});
 
             transaction.oncomplete = () => {
                 alert("Selected Subjects Saved")
@@ -89,6 +109,7 @@ document.getElementById('submitSubjects').addEventListener('click', function(){
                 alert("Failed to save Selected Subjects")
             }
     })
+}
 })
 
 function studentNameDisplay(){
@@ -105,7 +126,7 @@ function studentNameDisplay(){
             console.log(result.id)
             console.log(result.thirdName)
             let student = document.getElementById('studentName');
-            student.textContent = `${result.firstName} ${result.surName}`;
+            student.textContent = `${result.thirdName} ${result.surName}`;
             }
             cursor.continue();
         }
@@ -113,6 +134,21 @@ function studentNameDisplay(){
 }
 
 function displayTable(){
+    // Step 1: Get latest studentsID from studentsStore
+    const studentsTx = db.transaction("students", "readonly");
+    const studentsStore = studentsTx.objectStore("students");
+    const studentsRequest = studentsStore.openCursor(null, 'prev'); // get latest students (assuming students ID is auto-incremented)
+
+    studentsRequest.onsuccess = function (event) {
+        const sess = event.target.result;
+        if (!sess) {
+            alert("No students available. Please create a students third.");
+            return;
+        }
+
+        const studentsID = sess.value.studentsID; // or adjust if field name is different
+        console.log(sess.value.sessionID)
+
     let transaction = db.transaction('thirdTerm', 'readonly');
     let thirdTermStore = transaction.objectStore('thirdTerm');
 
@@ -131,11 +167,9 @@ function displayTable(){
         let subjectStore = subjectTx.objectStore("subjectStore");
         let subjectRequest = subjectStore.get(parseInt(subjectID));
 
-        console.log(subjectID)
-
         subjectRequest.onsuccess = () =>{
             const subject = subjectRequest.result;
-            if(userId == parseInt(result.studentID)){
+            if(userId == parseInt(result.studentID) && result.session === sess.value.sessionID){
 
             const subjectName = subject ? subject.subjects : "unknown subject";
 
@@ -209,7 +243,8 @@ function displayTable(){
                     ca2: parseInt(editca2.value),
                     ca3: parseInt(editca3.value),
                     ca4: parseInt(editca4.value),
-                    exam: parseInt(editExam.value)
+                    exam: parseInt(editExam.value),
+                    session: parseInt(sess.value.sessionID)
                 };
 
                 const transaction = db.transaction('thirdTerm', 'readwrite');
@@ -254,9 +289,8 @@ function displayTable(){
         }
         cursor.continue();
         }
-    }
+    }}
 }
-
 
     //Code for grade
     function getGrade(totalScore) {
@@ -273,10 +307,25 @@ function displayTable(){
     }
 
     function attInfo() {
+        // Step 1: Get latest studentsID from studentsStore
+    const studentsTx = db.transaction("students", "readonly");
+    const studentsStore = studentsTx.objectStore("students");
+    const studentsRequest = studentsStore.openCursor(null, 'prev'); // get latest students (assuming students ID is auto-incremented)
+
+    studentsRequest.onsuccess = function (event) {
+        const sess = event.target.result;
+        if (!sess) {
+            alert("No students available. Please create a students first.");
+            return;
+        }
+
+        // const = sess.value.studentsID; // or adjust if field name is different
+        console.log(sess.value.sessionID)
+
         let transaction = db.transaction('attendance3', 'readonly');
         let objectStore = transaction.objectStore('attendance3');
 
-        let attendanceInfo = document.getElementById('attendance3-info');
+        let attendance3Info = document.getElementById('attendance3-info');
 
         let count = 0;
 
@@ -284,15 +333,15 @@ function displayTable(){
             const cursor = event.target.result;
 
             if(cursor){
-                const {id, studentID} = cursor.value;
-                if(userId == studentID){
+                const {id, studentID, sessionID} = cursor.value;
+                if(userId == studentID && sessionID === sess.value.sessionID){
                     count++
                     console.log(count)
-                    attendanceInfo.textContent = count;
-                    attendanceInfo.style.color = '#aa025f'
+                    attendance3Info.textContent = count;
+                    attendance3Info.style.color = '#aa025f'
                 }
                 cursor.continue();
             }
         }
-
+    }
     }

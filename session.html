@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>classes Dashboard</title>
+    <link rel="stylesheet" href="styleGpt.css">
+    <link rel="stylesheet" href="form.css">
+    <link rel="stylesheet" href="table.css">
+    <link rel="stylesheet" href="student.css">
+    <link rel="stylesheet" href="attendanceEntry.css">
+</head>
+<body>
+    <div class="container">
+        <!-- dashbord page top bar-->
+        <div class="schoolbase" id="schoolbase">
+            <h3 id="schoolName">School Base</h3>
+            <h1>SCHOOL MANAGEMENT SYSTEM</h1>
+        </div>
+
+        <div class="contentBody">
+            <!---- Nav bar --------->
+            <nav class="navSide">
+                <ul id="navUl" class="navUl">
+                    <!---- from nav.js-->
+                </ul>
+            </nav>
+
+            <!----- Dash BOARD BODY ------>
+            <div class="dashOptions">
+                <div class="title">
+                    <h2>STUDENT</h2>
+                </div>
+                <div class="classesDivs">
+                    <div class="addDiv">
+                        <button class="animated-btn" id="addStudent">ADD SESSION</button>
+                        <div class="addForm" id="toggleFormAddForm">
+                            <button class="dismise" id="dismise"><h3>close</h3></button>
+                            <h2>INPUT SESSION</h2>
+                        <form id="formInput">
+                            <label for="sessionInput">Add Class Session</label>
+                            <input type="text" id="sessionInput" placeholder="Add Session Here">
+                            <input type="submit" value="ADD">
+                        </form>
+                        </div>
+                    </div>
+                     <table id="session-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Session</th>
+                                    <th>ACTION</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!---- subject.js table code-->
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="session.js"></script>
+    <script src="nav.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>

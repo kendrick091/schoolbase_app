@@ -59,7 +59,8 @@ document.getElementById("formInput").addEventListener("submit", function(e){
         otherName:  otherNameInput,
         phoneNumber: phoneNumberInput,
         gender: selectGender,
-        classID: selectClass
+        classID: selectClass,
+        sessionID: ''
     }
 
     const addInput = store.add(data);

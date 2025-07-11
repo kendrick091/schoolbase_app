@@ -3,12 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEACHERS</title>
+    <title>class INFO</title>
     <link rel="stylesheet" href="styleGpt.css">
     <link rel="stylesheet" href="form.css">
     <link rel="stylesheet" href="table.css">
-    <link rel="stylesheet" href="classes.css">
-    <link rel="stylesheet" href="attendanceEntry.css">
 </head>
 <body>
     <div class="container">
@@ -29,19 +27,30 @@
             <!----- Dash BOARD BODY ------>
             <div class="dashOptions">
                 <div class="title">
-                    <h2>Result</h2>
+                    <h2><span id="selectedClass"></span> Result</h2>
                 </div>
-                <div class="teachersDivs">
-                    <div class="addDiv">
-                        <ul id="listClass" class="listClass">
-                            <!---- from classes.js code--- -->
-                        </ul>
-                    </div>
+                <div class="tableDiv">
+                    <div id="amountOfStudent"></div>
+                    <table id="student-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>First Name</th>
+                                <th>Sur Name</th>
+                                <th>Other Name</th>
+                                <th>Action</th>
+                                <!-- <th>Sur Name</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!------ code from classStudent.js ----->
+                        </tbody>
+                    </table>
                 </div>
-            </div>
-        </div>
     </div>
-    <script type="module" src="result.js"></script>
+    </div>
+    </div>
+    <script type="module" src="classResult.js"></script>
     <script src="nav.js"></script>
     <script type="module" src="app.js"></script>
 </body>

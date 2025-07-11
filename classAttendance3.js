@@ -81,32 +81,64 @@ function displayCheckbox(){
 }
 
 //Add to Attendance3
-document.getElementById('submitAttendance3').addEventListener('click', function(){
-    let checkboxes = document.querySelectorAll("input[name='studentCheckbox']:checked");
+document.getElementById('submitAttendance3').addEventListener('click', function () {
+    const checkboxes = document.querySelectorAll("input[name='studentCheckbox']:checked");
 
-    let transaction = db.transaction("attendance3", "readwrite");
-    let store = transaction.objectStore("attendance3");
+    if (checkboxes.length === 0) {
+        alert("No students selected.");
+        return;
+    }
 
-    checkboxes.forEach((checkbox)=> {
-        let studentID = parseInt(checkbox.value);
+    // Step 1: Get latest studentsID from studentsStore
+    const studentsTx = db.transaction("students", "readonly");
+    const studentsStore = studentsTx.objectStore("students");
+    const studentsRequest = studentsStore.openCursor(null, 'prev'); // get latest students (assuming students ID is auto-incremented)
+
+    studentsRequest.onsuccess = function (event) {
+        const cursor = event.target.result;
+        if (!cursor) {
+            alert("No students available. Please create a students first.");
+            return;
+        }
+
+        const studentsID = cursor.value.studentsID; // or adjust if field name is different
+        console.log(cursor.value.sessionID)
+
+        // Step 2: Proceed to save attendance3
+        const attendance3Tx = db.transaction("attendance3", "readwrite");
+        const attendance3Store = attendance3Tx.objectStore("attendance3");
 
         const date = getCurrentData();
         const time = getCurrentTime();
 
-        //Save student ID into selectedStudents store
-        store.add({studentID: parseInt(studentID), classID: parseInt(userId),
-            date: date, status: "Present", time: time});
-            console.log(`${time} ${date}`)
+        checkboxes.forEach((checkbox) => {
+            const studentID = parseInt(checkbox.value);
 
-            transaction.onsuccess = () => {
-                alert("Selected student present")
-            }
+            const attendance3Record = {
+                studentID: studentID,
+                classID: parseInt(userId),
+                date: date,
+                time: time,
+                status: "Present",
+                sessionID: cursor.value.sessionID // Added studentsID here
+            };
 
-            transaction.onerror = () =>{
-                alert("Failed to save present")
-            }
-    })
-})
+            attendance3Store.add(attendance3Record);
+        });
+
+        attendance3Tx.oncomplete = () => {
+            alert("Attendance3 recorded with students ID: " + cursor.value.sessionID);
+        };
+
+        attendance3Tx.onerror = () => {
+            alert("Failed to record attendance3.");
+        };
+    };
+
+    studentsRequest.onerror = function () {
+        alert("Error retrieving students ID.");
+    };
+});
 
 function classNameDisplay(){
     let transaction = db.transaction('classes', 'readonly');
