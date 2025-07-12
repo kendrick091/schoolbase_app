@@ -61,7 +61,7 @@ function displayInfo(){
                 firstTerm.textContent = '1st Term';
                 cellAction.appendChild(firstTerm);
                 firstTerm.onclick = function(){
-                    window.location.href = `firstTerm.html?id=${id}`;
+                    window.location.href = `printableResult.html?id=${id}`;
                 }
                 
                 //2nd term button code
@@ -69,7 +69,7 @@ function displayInfo(){
                 secondTerm.textContent = '2nd Term';
                 cellAction.appendChild(secondTerm);
                 secondTerm.onclick = function(){
-                    window.location.href = `secondTerm.html?id=${id}`;
+                    window.location.href = `printableResult2.html?id=${id}`;
                 }
                 
                 //3rd term button code
@@ -77,7 +77,7 @@ function displayInfo(){
                 thirdTerm.textContent = '3rd Term';
                 cellAction.appendChild(thirdTerm);
                 thirdTerm.onclick = function(){
-                    window.location.href = `thirdTerm.html?id=${id}`;
+                    window.location.href = `printableResult3.html?id=${id}`;
                 }
                 
                 row.appendChild(cellAction) 

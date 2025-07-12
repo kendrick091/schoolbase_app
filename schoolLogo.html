@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>School Info Upload</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    label, input {
+      display: block;
+      margin: 10px 0;
+    }
+    img {
+      max-width: 200px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body>
+  <h2>Upload School Info</h2>
+  <label for="schoolName">School Name:</label>
+  <input type="text" id="schoolName" placeholder="Enter school name" />
+
+  <label for="logoInput">School Logo:</label>
+  <input type="file" id="logoInput" accept="image/*" />
+
+  <label for="extraImageInput">Other Image:</label>
+  <input type="file" id="extraImageInput" accept="image/*" />
+
+  <button id="saveButton">Save</button>
+  <hr />
+
+  <h3>Stored Info</h3>
+  <p><strong>Name:</strong> <span id="storedName"></span></p>
+  <p><strong>Logo:</strong><br><img id="storedLogo" /></p>
+  <p><strong>Other Image:</strong><br><img id="storedExtraImage" /></p>
+
+  <script type="module" src="schoolLogo.js"></script>
+</body>
+</html>

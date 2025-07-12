@@ -163,7 +163,8 @@ studentRequest.onsuccess = function(){
                     otherName: editOtherName.value,
                     phoneNumber: editPhoneNumber.value,
                     gender: student.gender,
-                    classID: student.classID
+                    classID: student.classID,
+                    sessionID: student.sessionID
                 };
 
                 const studentUpdate = db.transaction('students', 'readwrite');
