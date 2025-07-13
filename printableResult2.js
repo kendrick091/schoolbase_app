@@ -57,42 +57,122 @@ function displayResult() {
             subjectsMap.set(cursor.value.id, cursor.value.subjects);
             cursor.continue();
           } else {
-            // Now show results with resolved names
-            loadAndDisplayResults(student, subjectsMap, className, sessionName);
+            // ✅ Count attendance2 before displaying result
+          const attendance2Tx = db.transaction("attendance2", "readonly");
+          const attendance2Store = attendance2Tx.objectStore("attendance2");
+
+          let attendance2Count = 0;
+
+          attendance2Store.openCursor().onsuccess = (e) => {
+            const cur = e.target.result;
+            if (cur) {
+              const record = cur.value;
+              if (record.studentID === student.id) {
+                attendance2Count++;
+              }
+              cur.continue();
+            } else {
+                  // Now show results with resolved names
+            loadAndDisplayResults(student, subjectsMap, className, sessionName, attendance2Count);
           }
         };
+      }
+    }
       };
     };
   };
 }
 
-function loadAndDisplayResults(student, subjectsMap, className, sessionName) {
-  const secondTermTx = db.transaction("secondTerm", "readonly");
-  const secondTermStore = secondTermTx.objectStore("secondTerm");
+function renderSchoolHeaderAndFooter(resultDiv) {
+  const tx = db.transaction("school", "readonly");
+  const store = tx.objectStore("school");
+  const request = store.get(1); // assuming id = 1
+
+  request.onsuccess = () => {
+    const school = request.result;
+    if (!school) return;
+
+    // Header (top of result)
+    const headerDiv = document.createElement("div");
+    headerDiv.style.textAlign = "center";
+    headerDiv.style.marginBottom = "15px";
+
+    const logoImg = document.createElement("img");
+    logoImg.src = URL.createObjectURL(school.logo);
+    logoImg.alt = "School Logo";
+    logoImg.style.width = "80px";
+    logoImg.style.height = "80px";
+    logoImg.style.objectFit = "contain";
+    logoImg.style.display = "block";
+    logoImg.style.margin = "0 auto 5px";
+
+    const schoolName = document.createElement("h2");
+    schoolName.textContent = school.name;
+    schoolName.style.margin = "0";
+    schoolName.style.fontSize = "20px";
+
+    headerDiv.appendChild(logoImg);
+    headerDiv.appendChild(schoolName);
+
+    resultDiv.prepend(headerDiv); // ✅ Add to top of resultDiv
+  };
+}
+
+
+function loadAndDisplayResults(student, subjectsMap, className, sessionName, attendance2Count) {
+  const SECONDTermTx = db.transaction("secondTerm", "readonly");
+  const SECONDTermStore = SECONDTermTx.objectStore("secondTerm");
 
   const resultDiv = document.getElementById("resultDiv");
   resultDiv.innerHTML = "";
 
+  renderSchoolHeaderAndFooter(resultDiv);
+
+//Term
+const termType = document.createElement('h2');
+termType.textContent = 'SECOND TERM RESULT';
+resultDiv.appendChild(termType)
+
   // Top Student Info Table
   const infoTable = document.createElement("table");
   infoTable.border = "1";
-infoTable.style.marginBottom = "15px";
-infoTable.style.width = "50%"; // ✅ Make the table narrower
-infoTable.style.fontSize = "14px"; // ✅ Smaller text
+infoTable.style.marginTop = "0";
+infoTable.style.marginBottom = "5px";
+infoTable.style.width = "30%"; // ✅ Make the table narrower
+infoTable.style.fontSize = "12px"; // ✅ Smaller text
 infoTable.style.borderCollapse = "collapse";
   infoTable.innerHTML = `
-    <tr><th colspan="2">Student Information</th></tr>
     <tr><td>Student ID</td><td>**${student.id}</td></tr>
     <tr><td>First Name</td><td>${student.firstName}</td></tr>
-    <tr><td>Surname</td><td>${student.surName}</td></tr>
+    <tr><td>Sur Name</td><td>${student.surName}</td></tr>
+    <tr><td>Other Name</td><td>${student.otherName}</td></tr>
+  `;
+
+  const infoTable2 = document.createElement("table");
+  infoTable2.border = "1";
+infoTable2.style.marginTop = "0";
+infoTable2.style.marginBottom = "5px";
+infoTable2.style.width = "30%"; // ✅ Make the table narrower
+infoTable2.style.fontSize = "12px"; // ✅ Smaller text
+infoTable2.style.borderCollapse = "collapse";
+  infoTable2.innerHTML = `
     <tr><td>Class</td><td>${className}</td></tr>
     <tr><td>Session</td><td>${sessionName}</td></tr>
+    <tr><td>Attendance</td><td>${attendance2Count}</td></tr>
   `;
-  resultDiv.appendChild(infoTable);
+  const spliterDiv = document.createElement('div');
+  spliterDiv.style.display = 'flex';
+  spliterDiv.style.justifyContent = 'space-between';
+
+  spliterDiv.appendChild(infoTable);
+  spliterDiv.appendChild(infoTable2);
+
+  resultDiv.appendChild(spliterDiv)
 
   // Result Table
   const resultTable = document.createElement("table");
   resultTable.border = "1";
+  resultTable.style.fontSize = "12px"
   resultTable.innerHTML = `
     <tr>
       <th>Subject</th>
@@ -108,7 +188,7 @@ infoTable.style.borderCollapse = "collapse";
   let totalScore = 0;
   let subjectCount = 0;
 
-  secondTermStore.openCursor().onsuccess = (event) => {
+  SECONDTermStore.openCursor().onsuccess = (event) => {
     const cursor = event.target.result;
     if (cursor) {
       const record = cursor.value;
@@ -152,11 +232,11 @@ const totalAverage = subjectCount > 0 ? totalScore / subjectCount : 0;
 const summaryTable = document.createElement("table");
 summaryTable.border = "1";
 summaryTable.style.marginTop = "15px";
-summaryTable.style.width = "50%"; // ✅ Make the table narrower
+summaryTable.style.width = "35%"; // ✅ Make the table narrower
 summaryTable.style.fontSize = "14px"; // ✅ Smaller text
 summaryTable.style.borderCollapse = "collapse";
 summaryTable.innerHTML = `
-  <tr><th colspan="2">Status</th></tr>
+  <tr><th colspan="2">Progress</th></tr>
   <tr><td>Total Score</td><td>${totalScore}</td></tr>
  <!--- <tr><td>Average</td><td>${totalAverage.toFixed(2)}</td></tr> ----->
   <tr><td>Percentage</td><td>${percentage.toFixed(2)}%</td></tr>
