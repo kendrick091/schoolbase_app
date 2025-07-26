@@ -1,4 +1,4 @@
-export const DB_NAME = "dSchool";
+export const DB_NAME = "sdchool";
 export const DB_VERSION = 1;
 
 let db;

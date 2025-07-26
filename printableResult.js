@@ -242,10 +242,22 @@ summaryTable.innerHTML = `
   <tr><td>Percentage</td><td>${percentage.toFixed(2)}%</td></tr>
   <tr><td>Grade</td><td>${finalGrade}</td></tr>
 `;
+
+const teacherComment = document.createElement('div')
+teacherComment.innerHTML = `
+<h4>Teacher's comment: ____________________________________________________________________________________</h4>
+<h4>Head Teacher's comment: ____________________________________________________________________________________</h4>
+<br>
+<h4>Date: __________________________ Head Teacher's Signature _________________________________</h4>
+`;
 resultDiv.appendChild(summaryTable);
+resultDiv.appendChild(teacherComment)
 
       const printBtn = document.createElement("button");
       printBtn.textContent = "Print Result";
+      printBtn.style.background = 'green'
+      printBtn.style.padding = '10px'
+      printBtn.style.color = 'white'
       printBtn.onclick = () => window.print();
       resultDiv.appendChild(printBtn);
     }

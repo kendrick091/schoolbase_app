@@ -15,7 +15,7 @@ th {
   @media print {
     body {
       margin: 0;
-      margin-top: -80px;
+      margin-top: -90px;
       font-size: 12pt;
     }
 

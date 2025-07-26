@@ -144,7 +144,7 @@ function displayTable(){
             return;
         }
 
-        const studentsID = sess.value.studentsID; // or adjust if field name is different
+        const studentsID = sess.value.studentsID; 
         console.log(sess.value.sessionID)
 
     let transaction = db.transaction('firstTerm', 'readonly');
@@ -233,6 +233,9 @@ function displayTable(){
             const editBtn = document.createElement('button');
             editBtn.textContent = 'Edit';
             editBtn.onclick = function(){
+                if(!sess.value.sessionID){
+                    alert("No session registered for some students! Please go and activate a session")
+                }else{
                 let updateFirstTerm = {
                     id: parseInt(result.id),
                     studentID: parseInt(userId),
@@ -258,6 +261,7 @@ function displayTable(){
                     alert('Error updating Score');
                     console.error('Error updating Score')
                 }
+            }
             }
             action.appendChild(editBtn)
 

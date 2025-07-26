@@ -124,9 +124,9 @@ function studentNameDisplay(){
            
             if(result.id == userId){
             console.log(result.id)
-            console.log(result.secondName)
+            console.log(result.firstName)
             let student = document.getElementById('studentName');
-            student.textContent = `${result.secondName} ${result.surName}`;
+            student.textContent = `${result.firstName} ${result.surName}`;
             }
             cursor.continue();
         }

@@ -47,7 +47,8 @@ import { DB_NAME, DB_VERSION } from "./app.js";
           const data = {
             name,
             logo: logoBlob,
-            extra: extraBlob
+            extra: extraBlob,
+            recharge: 50
         };
         store.put(data, 1);  // ✅ supplies the key manually
 

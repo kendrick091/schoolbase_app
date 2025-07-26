@@ -126,7 +126,7 @@ function studentNameDisplay(){
             console.log(result.id)
             console.log(result.thirdName)
             let student = document.getElementById('studentName');
-            student.textContent = `${result.thirdName} ${result.surName}`;
+            student.textContent = `${result.firstName} ${result.surName}`;
             }
             cursor.continue();
         }
