@@ -1,4 +1,4 @@
-export const DB_NAME = "sdchool";
+export const DB_NAME = "DBSchool";
 export const DB_VERSION = 1;
 
 let db;
@@ -12,7 +12,7 @@ function openDataBase(){
 
         //School Name
         if(!db.objectStoreNames.contains('school')){
-            const schoolNameStore = db.createObjectStore('school',{keypath: 'id', autoIncrement: false});
+            const schoolNameStore = db.createObjectStore('school',{keyPath: 'id', autoIncrement: false});
         }
 
         //Session Store

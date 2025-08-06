@@ -238,8 +238,8 @@ summaryTable.style.borderCollapse = "collapse";
 summaryTable.innerHTML = `
   <tr><th colspan="2">Progress</th></tr>
   <tr><td>Total Score</td><td>${totalScore}</td></tr>
- <!--- <tr><td>Average</td><td>${totalAverage.toFixed(2)}</td></tr> ----->
-  <tr><td>Percentage</td><td>${percentage.toFixed(2)}%</td></tr>
+  <tr><td>Average</td><td>${totalAverage.toFixed(2)}</td></tr>
+  <!---- <tr><td>Percentage</td><td>${percentage.toFixed(2)}%</td></tr> ---->
   <tr><td>Grade</td><td>${finalGrade}</td></tr>
 `;
 

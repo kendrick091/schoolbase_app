@@ -135,7 +135,7 @@ body, html {
         display: flex;
         flex-direction: row;
         overflow-x: auto;
-        margin-top: 4%;
+        margin-top: 10%;
     }
 
     .navSide ul li {

@@ -11,6 +11,7 @@ request.onerror = () => {
 request.onsuccess = (event) => {
   db = event.target.result;
   countStudentsByGender();
+  showSession();
 };
 
 function countStudentsByGender() {
@@ -48,3 +49,33 @@ function countStudentsByGender() {
     }
   };
 }
+
+function showSession(){
+  let transaction = db.transaction('students', 'readonly');
+  let studentStore = transaction.objectStore('students');
+  let showFirst = studentStore.get(1);
+
+  showFirst.onsuccess = (event)=>{
+    let dataID = event.target.result;
+    let tx = db.transaction('session', 'readonly')
+    let sessionStore = tx.objectStore('session');
+    let ses = sessionStore.get(dataID.sessionID);
+
+    ses.onsuccess = (event)=>{
+      let showSes = event.target.result
+      if(showSes){
+      document.getElementById('sessionShow').innerHTML = 
+          `<h2 style="border-radius: 14px; padding: 3px;
+          margin: 20px 20px; background: rgba(161, 167, 78, 0.62)">Active session<br>
+          <span style="padding: 3px; color: rgba(3, 86, 119, 0.79)">${showSes.session}</span></h2>`;
+      }else{
+        document.getElementById('sessionShow').innerHTML = 
+          `<h2 style="border-radius: 14px; padding: 3px;
+          margin: 20px 20px; background: rgba(161, 167, 78, 0.62)">Active session<br>
+          <span style="padding: 3px; color: rgba(3, 86, 119, 0.79)">Please School a Session</span></h2>`
+      }
+    }
+    }
+  }
+
+

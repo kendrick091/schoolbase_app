@@ -203,11 +203,11 @@ function displayTable(){
             ca3.appendChild(editca3);
             row.appendChild(ca3)
 
-            const ca4 = document.createElement('td');
-            const editca4 = document.createElement('input');
-            editca4.value = result.ca4;
-            ca4.appendChild(editca4);
-            row.appendChild(ca4);
+            // const ca4 = document.createElement('td');
+            // const editca4 = document.createElement('input');
+            // editca4.value = result.ca4;
+            // ca4.appendChild(editca4);
+            // row.appendChild(ca4);
 
             let caSum = document.createElement('td');
             caSum.textContent = catotal;
@@ -243,7 +243,7 @@ function displayTable(){
                     ca1: parseInt(editca1.value),
                     ca2: parseInt(editca2.value),
                     ca3: parseInt(editca3.value),
-                    ca4: parseInt(editca4.value),
+                    // ca4: parseInt(editca4.value),
                     exam: parseInt(editExam.value),
                     session: parseInt(sess.value.sessionID)
                 };
@@ -254,6 +254,32 @@ function displayTable(){
 
                 updateRequest.onsuccess = () =>{
                     console.log('Update made on FirstTerm Result')
+
+                const tx = db.transaction('school','readwrite');
+                const store = tx.objectStore('school')
+                const rechargeData = store.get(1);
+
+                rechargeData.onsuccess = (event)=>{
+                const data = event.target.result
+                console.log(data)
+
+                if(!data){
+                    console.log('No data found');
+                    return
+                }
+
+                if(data.recharge > 0){
+                    data.recharge -= 1;
+                    store.put(data);
+                    console.log('New Recharge', data.recharge)
+                }else{
+                    alert("Gem "+ data.recharge + " Please increase or buy gem")
+                }
+                }
+                rechargeData.onerror = ()=>{
+                    console.log("Error using recharge data")
+                }
+
                     location.reload();
                 }
 
@@ -277,6 +303,31 @@ function displayTable(){
 
                 termDel.onsuccess = ()=>{
                     alert('Subject Deleted!')
+                    //Deduct from school recharge
+                    const tx = db.transaction('school','readwrite');
+                const store = tx.objectStore('school')
+                const rechargeData = store.get(1);
+
+                rechargeData.onsuccess = (event)=>{
+                const data = event.target.result
+                console.log(data)
+
+                if(!data){
+                    console.log('No data found');
+                    return
+                }
+
+                if(data.recharge > 0){
+                    data.recharge -= 1;
+                    store.put(data);
+                    console.log('New Recharge', data.recharge)
+                }else{
+                    alert("Gem "+ data.recharge + " Please increase or buy gem")
+                }
+                }
+                rechargeData.onerror = ()=>{
+                    console.log("Error using recharge data")
+                }
                     location.reload();
                 }
                 termDel.onerror = ()=>{
