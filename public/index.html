@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>school Base</title>
+    <!-- <link rel="stylesheet" href="style.css"> -->
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="styleGpt.css">
+    <link rel="stylesheet" href="attendanceEntry.css">
+</head>
+<body>
+    <div class="container">
+        <!-- dashbord page top bar-->
+        <div class="schoolbase" id="schoolbase">
+            <h3 id="schoolName">School Base</h3>
+            <h1>SCHOOL MANAGEMENT SYSTEM</h1>
+            <div id="gemAmount"></div>
+        </div>
+
+        <div class="contentBody">
+            <!---- Nav bar --------->
+            <nav class="navSide">
+                <ul id="navUl">
+                    <!---- from nav.js-->
+                </ul>
+            </nav>
+
+            <!----- Dash BOARD BODY ------>
+            <div class="dashOptions">
+                <div class="title">
+                    <h2>FEES / MANAGMENT</h2>
+                </div>
+                <div class="infoCards">
+                    <div class="infoCard" id="studentsAmount">Students <br> 
+                        <span id="totalCount"></span>
+                    </div>
+                    <!-- <div class="infoCard" id="teachersAmount">Teachers <br>
+                    <span></span>
+                </div> -->
+                    <div class="infoCard" id="boysAmount">Boys <br>
+                    <span id="boyCount"></span>
+                </div>
+                    <div class="infoCard" id="girlsAmount">Girls <br>
+                    <span id="girlCount"></span>
+                </div>
+                </div>
+                <div class="moreInfo" id="moreInfo">
+                    <div class="sessionShow" id="sessionShow">
+                        <!------Show active session ----->
+                    </div>
+                    <!---- more info on the school ------>
+                </div>
+                <div class="space-between">
+                    <a href="schoolLogo.html"><button class="shiny-btn">School Info</button></a>
+                 <div class="session-div">
+                    <a href="session.html"><button class="shiny-btn">Academic Sessions</button></a>
+                </div>
+                <div class="result-div">
+                    <a href="result.html"><button class="shiny-btn">Result</button></a>
+                </div>
+                </div>
+                <div class="sessionShow">
+                    <a href="recharge.html"><button style="padding: 10px; font-size: 18px;
+                    font-weight: bolder; width: 200px; margin: 12px 0;
+                    width: 100%; cursor: pointer;">
+                    Increase Gem</button></a>
+                </div>
+                <div class="connectDevices">
+                        <a href="admin.html"><button class="shareAdminDataBtn red">Share Data to Teacher(s)</button></a>
+                        <a href="TeacherDevice.html"><button class="getDataBtn blue">Teacher's Response</button></a>
+                    </div>
+                <a href="https://wa.me/2349151003654" target="_blank" 
+                style="color: green;">
+                    Chat with us on WhatsApp</a>
+            </div>
+        </div>
+    </div>
+    <script type="module" src="showgem.js"></script>
+    <script type="module" src="index.js"></script>
+    <script src="nav.js"></script>
+    <script type="module" src="app.js"></script>
+</body>
+</html>
