@@ -24,9 +24,17 @@ function exportIndexedDB(DB_NAME) {
             const transaction = db.transaction(db.objectStoreNames, "readonly");
 
             let exportData = {};
-
             let storesProcessed = 0;
+
             for (let storeName of db.objectStoreNames) {
+                if (storeName === "school") { 
+                    storesProcessed++; // Skip school store
+                    if (storesProcessed === db.objectStoreNames.length) {
+                        resolve(exportData);
+                    }
+                    continue;
+                }
+
                 let store = transaction.objectStore(storeName);
                 let getAllReq = store.getAll();
 
@@ -44,6 +52,7 @@ function exportIndexedDB(DB_NAME) {
         request.onerror = () => reject(request.error);
     });
 }
+
 
 // Example: download all DB data
 exportIndexedDB(DB_NAME).then(data => {
