@@ -4,16 +4,26 @@ const urlsToCache = [
   "/index.html",
   "/styleGpt.css",
   "/app.js",
-  "/icons/logo.png-192.png",
-  "/icons/logo.png-512.png"
+  "/icons/logo-192.png",
+  "/icons/logo-512.png"
 ];
 
 // Install
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(urlsToCache))
+    caches.open(CACHE_NAME).then(async (cache) => {
+      for (const url of urlsToCache) {
+        try {
+          await cache.add(url);
+          console.log(`Cached: ${url}`);
+        } catch (err) {
+          console.error(`Failed to cache: ${url}`, err);
+        }
+      }
+    })
   );
 });
+
 
 // Fetch
 self.addEventListener("fetch", (event) => {
