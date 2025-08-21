@@ -66,7 +66,7 @@ viewAdBtn.addEventListener('click', ()=>{
         if(countdown <= 0){
             clearInterval(interval);
             adContainer.style.display = "none";
-            giveReward(7);
+            giveReward(700);
             viewAdBtn.disabled = false;
         }
     }, 1000)

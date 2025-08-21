@@ -1,13 +1,19 @@
 /* ====== STUDENT TABLE STYLING ====== */
+.table-container {
+    width: 100%;
+    overflow-x: auto;   /* horizontal scroll */
+    -webkit-overflow-scrolling: touch; /* smooth scrolling on iOS */
+}
 
+/* Table */
 table {
     width: 100%;
+    min-width: 600px; /* prevent columns from collapsing too much */
     border-collapse: collapse;
-    margin-top: 30px;
+    margin-top: 20px;
     background-color: #fff;
     box-shadow: 0 5px 15px rgba(0,0,0,0.05);
     border-radius: 10px;
-    overflow: hidden;
     font-family: "Segoe UI", sans-serif;
 }
 
@@ -18,16 +24,15 @@ table thead {
 }
 
 table th {
-    padding: 15px;
+    padding: 12px;
     text-align: left;
     font-weight: 600;
     font-size: 14px;
-    letter-spacing: 0.5px;
 }
 
 /* Table Body Rows */
 table td {
-    padding: 3px 6px;
+    padding: 6px 8px;
     font-size: 13px;
     color: #333;
     border-bottom: 1px solid #eee;
@@ -40,22 +45,49 @@ table tbody tr:nth-child(even) {
 
 /* Hover effect */
 table tbody tr:hover {
-    background-color: #92aabb;
+    background-color: #e3f2fd;
     cursor: pointer;
 }
 
-
-table input{
-    width: 60px;
-    border-radius: 10px;
-    padding: 5px;
+/* Inputs inside table */
+table input {
+    width: 70%;
+    border-radius: 6px;
+    padding: 4px;
     font-size: 13px;
-    border: none;
+    border: 1px solid #ccc;
 }
 
-table button{
-    padding: 9px;
+/* Buttons */
+table button {
+    padding: 8px;
     font-weight: bold;
     width: 100%;
     cursor: pointer;
+    border: none;
+    border-radius: 6px;
+    background-color: #1e88e5;
+    color: white;
+    margin: 2px 0;
+}
+
+/* Responsive tweaks */
+@media (max-width: 768px) {
+    table {
+        min-width: 500px; /* adjust for tablet */
+    }
+    table th, table td {
+        font-size: 12px;
+        padding: 6px;
+    }
+}
+
+@media (max-width: 480px) {
+    table {
+        min-width: 395px; /* adjust for small phones */
+    }
+    table th, table td {
+        font-size: 9px;
+        padding: 3px;
+    }
 }
