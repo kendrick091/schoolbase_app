@@ -5,36 +5,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>School Base</title>
     <link rel="stylesheet" href="styleGpt.css">
-    <link rel="stylesheet" href="printableResult.css">
+    <!-- <link rel="stylesheet" href="printableResult.css"> -->
+     <style>
+    body { font-family: Arial, sans-serif; }
+    h2 { text-align: center; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { border: 1px solid #444; padding: 8px; text-align: center; }
+    th { background: #f0f0f0; }
+    .summary { margin-top: 20px; font-weight: bold; }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <!-- dashbord page top bar-->
-        <div class="schoolbase" id="schoolbase">
-            <h3 id="schoolName">School Base</h3>
-            <h1>SCHOOL MANAGEMENT SYSTEM</h1>
-        </div>
+  <h2 id="studentName"></h2>
+  <h3 id="classInfo"></h3>
+  <h3 id="sessionInfo"></h3>
+  <h3 id="termInfo"></h3>
 
-        <div class="contentBody">
-            <!---- Nav bar --------->
-            <nav class="navSide">
-                <ul id="navUl">
-                    <!---- from nav.js-->
-                </ul>
-            </nav>
+  <table id="resultTable">
+  <thead>
+    <tr>
+      <th>Subject</th>
+      <th>CA1</th>
+      <th>CA2</th>
+      <th>CA3</th>
+      <th>Exam</th>
+      <th>Total</th>
+      <th>Grade</th>
+      <th>Remark</th>
+    </tr>
+  </thead>
+  <tbody></tbody>
+  </table>
 
-            <!----- Dash BOARD BODY ------>
-            <div class="dashOptions">
-            <div id="allResultsDiv"></div>
-            <div class="resultDiv" id="resultDiv">
-                
-            </div>
-            </div>
-        </div>
-    </div>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script type="module" src="printableResult.js"></script>
-<script src="nav.js"></script>
-<script type="module" src="app.js"></script>
+  <div class="summary" id="summary"></div>
+
+  <script type="module" src="printableResult.js"></script>
 </body>
 </html>

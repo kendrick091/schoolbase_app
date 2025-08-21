@@ -1,4 +1,4 @@
-export const DB_NAME = "SchoolBase";
+export const DB_NAME = "School_Base";
 export const DB_VERSION = 1;
 
 let db;
@@ -18,6 +18,12 @@ function openDataBase(){
         //Session Store
         if(!db.objectStoreNames.contains('session')){
             const sessionStore = db.createObjectStore('session', {keyPath: 'id', autoIncrement: true});
+        }
+
+        // Ensure "session_students" object store exists
+        if (!db.objectStoreNames.contains("session_students")) {
+            const store = db.createObjectStore("session_students", { keyPath: "id", autoIncrement: true });
+            store.createIndex("session_student_class", ["sessionID", "studentID", "classID"], { unique: true });
         }
 
         //Student Store

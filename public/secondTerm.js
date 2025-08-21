@@ -61,37 +61,31 @@ function displayRecharge() {
 // Get the *latest* student's sessionID (mirrors your original logic)
 function getCurrentSessionId() {
   return new Promise((resolve, reject) => {
-    const studentsTx = db.transaction("students", "readonly");
-    const studentsStore = studentsTx.objectStore("students");
-    const req = studentsStore.openCursor(null, "prev");
+    const tx = db.transaction("students", "readonly");
+    const store = tx.objectStore("students");
+    const req = store.get(userId); // get by ID
 
-    req.onsuccess = (e) => {
-      const cursor = e.target.result;
-      if (!cursor) {
-        reject(new Error("No students available. Please create a student first."));
+    req.onsuccess = () => {
+      if (!req.result) {
         return;
       }
-      resolve(cursor.value.sessionID);
+      resolve(req.result.sessionID);
     };
     req.onerror = () => reject(new Error("Failed to read students store"));
   });
 }
 
-//===== Helper for classID ===
-// Get the *latest* student's sessionID (mirrors your original logic)
 function getCurrentClassId() {
   return new Promise((resolve, reject) => {
-    const studentsTx = db.transaction("students", "readonly");
-    const studentsStore = studentsTx.objectStore("students");
-    const req = studentsStore.openCursor(null, "prev");
+    const tx = db.transaction("students", "readonly");
+    const store = tx.objectStore("students");
+    const req = store.get(userId); // get by ID
 
-    req.onsuccess = (e) => {
-      const cursor = e.target.result;
-      if (!cursor) {
-        reject(new Error("No students available. Please create a student first."));
+    req.onsuccess = () => {
+      if (!req.result) {
         return;
       }
-      resolve(cursor.value.classID);
+      resolve(req.result.classID);
     };
     req.onerror = () => reject(new Error("Failed to read students store"));
   });

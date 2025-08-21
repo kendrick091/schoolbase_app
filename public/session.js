@@ -12,31 +12,29 @@ dismise.addEventListener('click', function(){
 })
 
 let db;
-import { DB_NAME,DB_VERSION } from './app.js';
+import { DB_NAME, DB_VERSION } from './app.js';
 
 const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-request.onupgradeneeded = (event)=>{
-    db = event.target.result;
-}
-
 //SUCCESS
-request.onsuccess = (event)=>{
+request.onsuccess = (event) => {
     db = event.target.result;
-    console.log('Session opened')
+    console.log('Session opened');
     displayData();
 }
 
-request.onerror = (event)=>{
+request.onerror = (event) => {
     console.log('Error', event.target.result);
 }
 
-document.getElementById("formInput").addEventListener("submit", function(e){
+document.getElementById("formInput").addEventListener("submit", function (e) {
     e.preventDefault();
-    if(!db){
+
+    if (!db) {
         alert("DataBase not ready");
         return;
     }
+
     //RANDOM NUMBER
     const num = Math.floor(Math.random() * 999) + 1;
     const sessionInput = document.getElementById('sessionInput').value;
@@ -44,42 +42,36 @@ document.getElementById("formInput").addEventListener("submit", function(e){
     const transaction = db.transaction("session", "readwrite");
     const store = transaction.objectStore("session");
 
-    if(!sessionInput){
-        alert("Session should not be empty!")
-    }else{
-    const data = {
-        id: num,
-        session: sessionInput
-    }
+    if (!sessionInput) {
+        alert("Session should not be empty!");
+    } else {
+        const data = { id: num, session: sessionInput }
+        const addInput = store.add(data);
 
-    const addInput = store.add(data);
+        addInput.onsuccess = function () {
+            console.log("Session Added to DB successfully!");
+            location.reload();
+        }
 
-    addInput.onsuccess = function(){
-        console.log("Session Added to DB successfully!");
-        location.reload()
+        addInput.onerror = function () {
+            alert("Error adding Session");
+        }
     }
-
-    addInput.onerror = function(){
-        alert("Error adding Session");
-    }
-}
-})
+});
 
 //Table code
-function displayData(){
+function displayData() {
     let transaction = db.transaction(['session'], 'readonly');
     let objectStore = transaction.objectStore('session');
+
     const sessionRequest = objectStore.getAll();
+    sessionRequest.onsuccess = function () {
+        const session = sessionRequest.result;
+        let SessionTable = document.querySelector('#session-table tbody');
+        SessionTable.innerHTML = '';
 
-sessionRequest.onsuccess = function(){
-    const session = sessionRequest.result;
-
-    let SessionTable = document.querySelector('#session-table tbody');
-    SessionTable.innerHTML = '';
-    
-    
-    session.forEach((session) =>{
-            const row =  document.createElement('tr');
+        session.forEach((session) => {
+            const row = document.createElement('tr');
 
             const cellID = document.createElement('td');
             cellID.textContent = session.id;
@@ -90,92 +82,117 @@ sessionRequest.onsuccess = function(){
             const editCellSession = document.createElement('input');
             editCellSession.value = session.session;
             cellSession.appendChild(editCellSession);
-
             row.appendChild(cellSession);
 
-            //AddBtn
+            //Action Btns
             const cellAction = document.createElement('td');
+
+            //EDIT
             const editBtn = document.createElement('button');
             editBtn.textContent = "Edit";
-
-            editBtn.onclick = function(){
+            editBtn.onclick = function () {
                 let updateSession = {
                     id: session.id,
                     session: editCellSession.value,
-                    
                 };
 
                 const sessionUpdate = db.transaction('session', 'readwrite');
                 const store = sessionUpdate.objectStore('session');
                 const updateRequest = store.put(updateSession);
 
-                updateRequest.onsuccess = function(){
-                    alert('Session updated')
-                    console.log('Session updated')
+                updateRequest.onsuccess = function () {
+                    alert('Session updated');
+                    console.log('Session updated');
                 }
-                updateRequest.onerror = function(){
-                    console.log('failed to update Session')
+
+                updateRequest.onerror = function () {
+                    console.log('failed to update Session');
                 }
             }
             cellAction.appendChild(editBtn);
 
+            //ACTIVATE
             const useSession = document.createElement('button');
-            useSession.textContent = 'Activate'
+            useSession.textContent = 'Activate';
             useSession.style.background = 'rgb(160, 219, 155)';
             useSession.style.color = 'rgb(20, 92, 14)';
 
             useSession.onclick = function () {
-            const sessionID = session.id;
+                const sessionID = session.id;
 
-            // Update all student records with the activated session ID
-            const tx = db.transaction('students', 'readwrite');
-            const studentStore = tx.objectStore('students');
-            const studentReq = studentStore.getAll();
+                // Update all student records with the activated session ID
+                const tx = db.transaction('students', 'readwrite');
+                const studentStore = tx.objectStore('students');
+                const studentReq = studentStore.getAll();
 
-            studentReq.onsuccess = function () {
-                const students = studentReq.result;
-                students.forEach((student) => {
-                    student.sessionID = sessionID;
-                    studentStore.put(student);
-                });
+                studentReq.onsuccess = function () {
+                    const students = studentReq.result;
+
+                    students.forEach((student) => {
+                        // update sessionID on student
+                        student.sessionID = sessionID;
+                        studentStore.put(student);
+
+                        // also insert into session_students store if not exists
+                        const ssTx = db.transaction("session_students", "readwrite");
+                        const ssStore = ssTx.objectStore("session_students");
+
+                        const index = ssStore.index("session_student_class");
+                        const checkReq = index.get([sessionID, student.id, student.classID]);
+
+                        checkReq.onsuccess = function () {
+                            if (!checkReq.result) {
+                                // insert new record
+                                ssStore.add({
+                                    sessionID: sessionID,
+                                    studentID: student.id,
+                                    classID: student.classID
+                                });
+                                console.log(`Linked student ${student.id} -> session ${sessionID}`);
+                            } else {
+                                console.log(`Already linked: student ${student.id}, session ${sessionID}, class ${student.classID}`);
+                            }
+                        };
+                    });
+                };
+
+                tx.onerror = function () {
+                    alert("Failed to update students with session ID");
+                };
+
+                tx.oncomplete = function () {
+                    alert(`Activated session ${session.session} (ID: ${sessionID}) assigned to all students.`);
+                };
             };
-
-            tx.onerror = function () {
-                alert("Failed to update students with session ID");
-            };
-
-            tx.oncomplete = function () {
-                alert(`Activated session ${session.session} (ID: ${sessionID}) assigned to all students.`);
-            };
-        };
-
-
             cellAction.appendChild(useSession);
 
-            //DeleteBtn
+            //DELETE
             const cellDelete = document.createElement('button');
             cellDelete.textContent = 'Del';
             cellDelete.style.background = 'red';
-            cellDelete.style.border = 'none'
-            cellDelete.onclick = function(){
+            cellDelete.style.border = 'none';
+            cellDelete.onclick = function () {
                 const deleteSub = db.transaction('session', 'readwrite');
                 const store = deleteSub.objectStore('session');
                 const subjectDel = store.delete(session.id);
 
-                subjectDel.onsuccess = ()=>{
-                    alert('Session Deleted!')
+                subjectDel.onsuccess = () => {
+                    alert('Session Deleted!');
                     location.reload();
                 }
-                subjectDel.onerror = ()=>{
-                    console.error('Subject delete Error')
+
+                subjectDel.onerror = () => {
+                    console.error('Subject delete Error');
                 }
             }
 
             cellAction.appendChild(cellDelete);
+
             row.appendChild(cellAction);
 
             SessionTable.appendChild(row);
-        })
-        }
-        }
+        });
+    }
+}
+
     

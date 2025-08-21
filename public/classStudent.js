@@ -79,6 +79,15 @@ function displayInfo(){
                 thirdTerm.onclick = function(){
                     window.location.href = `thirdTerm.html?id=${id}`;
                 }
+
+                // Promotion button
+                const promoteBtn = document.createElement('button');
+                promoteBtn.textContent = 'Promote';
+                cellAction.appendChild(promoteBtn);
+
+                promoteBtn.onclick = function () {
+                    openPromotionModal(id, `${firstName} ${surName}`);
+                };
                 
                 row.appendChild(cellAction) 
 
@@ -97,6 +106,62 @@ function displayInfo(){
     }
 
 }
+
+let selectedStudentId = null;
+
+function openPromotionModal(studentId, name) {
+    selectedStudentId = studentId;
+
+    // Show student name
+    document.getElementById('studentName').textContent = name;
+
+    // Populate dropdown with classes
+    const classSelect = document.getElementById('classSelect');
+    classSelect.innerHTML = ''; // clear old options
+
+    const classTx = db.transaction('classes', 'readonly');
+    const classStore = classTx.objectStore('classes');
+    classStore.openCursor().onsuccess = function (e) {
+        const cursorClass = e.target.result;
+        if (cursorClass) {
+            const option = document.createElement('option');
+            option.value = cursorClass.value.id;
+            option.textContent = cursorClass.value.className;
+            classSelect.appendChild(option);
+            cursorClass.continue();
+        }
+    };
+
+    // Show modal
+    document.getElementById('promotionModal').style.display = 'flex';
+}
+
+// Cancel button
+document.getElementById('cancelPromotion').onclick = function () {
+    document.getElementById('promotionModal').style.display = 'none';
+};
+
+// Confirm promotion
+document.getElementById('confirmPromotion').onclick = function () {
+    const newClassId = Number(document.getElementById('classSelect').value);
+    if (!selectedStudentId || isNaN(newClassId)) return;
+
+    const tx = db.transaction('students', 'readwrite');
+    const store = tx.objectStore('students');
+
+    const getStudent = store.get(selectedStudentId);
+    getStudent.onsuccess = function () {
+        const studentData = getStudent.result;
+        if (studentData) {
+            studentData.classID = newClassId;
+            store.put(studentData);
+            alert(`Student promoted to class ID ${newClassId}!`);
+            document.getElementById('promotionModal').style.display = 'none';
+            displayInfo(); // Refresh table
+        }
+    };
+};
+
 
 function className(){
     const transaction = db.transaction('classes', 'readonly');
