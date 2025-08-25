@@ -20,22 +20,98 @@ request.onsuccess = (event) => {
   loadResult();
 };
 
+//School logo
+function renderSchoolHeaderAndFooter() {
+  const tx = db.transaction("school", "readonly");
+  const store = tx.objectStore("school");
+  const request = store.get(1); // assuming id = 1
+
+  request.onsuccess = () => {
+    const school = request.result;
+    if (!school) return;
+
+    // Header (top of result)
+    const headerDiv = document.createElement("div");
+    headerDiv.style.textAlign = "center";
+    headerDiv.style.marginBottom = "15px";
+
+    const logoImg = document.createElement("img");
+    logoImg.src = URL.createObjectURL(school.logo);
+    logoImg.alt = "School Logo";
+    logoImg.style.width = "80px";
+    logoImg.style.height = "80px";
+    logoImg.style.objectFit = "contain";
+    logoImg.style.display = "block";
+    logoImg.style.margin = "0 auto 5px";
+
+    const schoolName = document.createElement("h2");
+    schoolName.textContent = school.name;
+    schoolName.style.margin = "0";
+    schoolName.style.fontSize = "20px";
+
+    headerDiv.appendChild(logoImg);
+    headerDiv.appendChild(schoolName);
+
+    document.getElementById('schoolLogoDiv').appendChild(headerDiv)
+
+    // resultDiv.prepend(headerDiv); // ✅ Add to top of resultDiv
+  };
+}
+
+
 function loadStudentInfo() {
   const transaction = db.transaction(['students', 'classes', 'session', 'session_students'], 'readonly');
 
+  let studentTh = document.getElementById('studentTh');
+  let studentTh2 = document.getElementById('studentTh2');
+  
   // Student
   const studentStore = transaction.objectStore('students');
   studentStore.get(studentId).onsuccess = (e) => {
     const student = e.target.result;
-    document.getElementById("studentName").textContent =
-      `${student.surName} ${student.firstName} ${student.otherName || ""}`;
+
+      let tableRowFirstName = document.createElement('tr');
+      let title = document.createElement('td')
+      let firstNameTable = document.createElement('td')
+      title.textContent = `First Name:`;
+      firstNameTable.textContent = `${student.firstName}`;
+      tableRowFirstName.appendChild(title)
+      tableRowFirstName.appendChild(firstNameTable);
+
+      let tableRowSurName = document.createElement('tr');
+      let titleSurName = document.createElement('td')
+      let surNameTable = document.createElement('td')
+      titleSurName.textContent = `Sur Name:`;
+      surNameTable.textContent = `${student.surName}`;
+      tableRowSurName.appendChild(titleSurName)
+      tableRowSurName.appendChild(surNameTable)
+      
+       let tableRowOtherName = document.createElement('tr');
+      let titleOtherName = document.createElement('td')
+      let otherNameTable = document.createElement('td')
+      titleOtherName.textContent = `Other Name:`;
+      otherNameTable.textContent = `${student.otherName}`;
+      tableRowOtherName.appendChild(titleOtherName);
+      tableRowOtherName.appendChild(otherNameTable)
+
+      studentTh.appendChild(tableRowFirstName);
+      studentTh.appendChild(tableRowSurName)
+      studentTh.appendChild(tableRowOtherName)
   };
 
   // Session
   const sessionStore = transaction.objectStore('session');
   sessionStore.get(sessionId).onsuccess = (s) => {
-    document.getElementById("sessionInfo").textContent =
-      `Session: ${s.target.result.session}`;
+    
+      let tableRowSession = document.createElement('tr');
+      let titleSession = document.createElement('td')
+      let sessionTable = document.createElement('td')
+      titleSession.textContent = `Session:`;
+      sessionTable.textContent = `${s.target.result.session}`;
+      tableRowSession.appendChild(titleSession)
+      tableRowSession.appendChild(sessionTable)
+
+      studentTh2.appendChild(tableRowSession)
   };
 
   const mapStore = transaction.objectStore('session_students');
@@ -48,8 +124,15 @@ request.onsuccess = (event) => {
     if(record.studentID === studentId && record.sessionID === sessionId) {
       const classStore = db.transaction('classes', 'readonly').objectStore('classes');
       classStore.get(record.classID).onsuccess = (c) => {
-        document.getElementById("classInfo").textContent =
-          `Class: ${c.target.result.className}`;
+          let tableRowClass = document.createElement('tr');
+          let titleClass = document.createElement('td')
+          let classTable = document.createElement('td')
+          titleClass.textContent = `Class:`;
+          classTable.textContent = `${c.target.result.className}`;
+          tableRowClass.appendChild(titleClass)
+          tableRowClass.appendChild(classTable)
+
+          studentTh2.appendChild(tableRowClass)
       };
       return; // stop after finding
     }
@@ -61,7 +144,15 @@ request.onsuccess = (event) => {
 
 
   // Term
-  document.getElementById("termInfo").textContent = `Term: ${term} Term`;
+  let tableRowTerm = document.createElement('tr');
+      let titleTerm = document.createElement('td')
+      let termTable = document.createElement('td')
+      titleTerm.textContent = `Term:`;
+      termTable.textContent = `${term} Term`;
+      tableRowTerm.appendChild(titleTerm)
+      tableRowTerm.appendChild(termTable)
+
+      studentTh2.appendChild(tableRowTerm)
 }
 
 
@@ -73,6 +164,8 @@ function loadResult() {
 
   const transaction = db.transaction(storeName, 'readonly');
   const termStore = transaction.objectStore(storeName);
+
+  renderSchoolHeaderAndFooter()
 
   const tableBody = document.querySelector("#resultTable tbody");
   tableBody.innerHTML = "";
@@ -125,6 +218,10 @@ function loadResult() {
     }
   };
 }
+
+document.getElementById('printBtn').addEventListener('click', ()=>{
+  window.print();
+})
 
 
 

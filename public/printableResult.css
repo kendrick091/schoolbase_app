@@ -1,3 +1,22 @@
+body{
+  background: #e4e6e6;
+  display: flex;
+  justify-content: center;
+}
+.container{
+  padding: 20px;
+  width: 90%;
+  background: white;
+}
+
+.headTableDiv{
+  display: flex;
+  justify-content: space-between;
+}
+
+.headTableDiv table{
+  width: 40%;
+}
 table {
   width: 100%;
   border-collapse: collapse;
@@ -12,27 +31,28 @@ th {
   background-color: #f0f0f0;
 }
 
+.printDiv{
+  padding: 5px;
+  width: 100%;
+}
+
   @media print {
     body {
       margin: 0;
-      margin-top: -90px;
-      font-size: 12pt;
+      
     }
 
-    .schoolbase{
-        display: none;
-    }
-
-    #resultDiv {
-      padding: 20px;
-      page-break-after: always;
+    .container {
+      padding: 3%;
+      margin-top: 5%;
+      width: 100%;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
       margin-bottom: 15px;
-      font-size: 11pt;
+      font-size: 13px;
     }
 
     th, td {
@@ -50,9 +70,10 @@ th {
       margin-bottom: 10px;
     }
 
-    button, canvas {
-      display: none !important; /* Hide print button & chart in print*/
+    .printDiv{
+      display: none;
     }
+
   } 
 
   @media screen {
@@ -77,3 +98,34 @@ th {
       background-color: #f0f0f0;
     }
   }
+
+@media (max-width: 478px){
+  .container{
+  padding: 2px;
+  width: 100%;
+  background: white;
+}
+
+.headTableDiv{
+  display: flex;
+  justify-content: space-between;
+}
+
+.headTableDiv table{
+  width: 100%;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 10px;
+}
+th, td {
+  border: 1px solid #000;
+  padding: 6px;
+  text-align: left;
+  font-size: 10px;
+}
+th {
+  background-color: #f0f0f0;
+}
+}

@@ -25,8 +25,11 @@ function loadSession() {
       const { id, session } = cursor.value;
       
       const li = document.createElement("li");
+      li.style.margin = '12px'
+      li.style.listStyle = 'none'
       const button = document.createElement("button");
       button.textContent = session;
+      button.classList = 'shiny-btn'
       button.onclick = () => {
         // Redirect to the printable result with student, term, and session
         window.location.href = `printableResult.html?id=${studentId}&term=${term}&session=${id}`;

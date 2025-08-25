@@ -230,9 +230,9 @@ async function displayTable() {
       const row = document.createElement("tr");
 
       // id cell
-      const id = document.createElement("td");
-      id.textContent = record.id;
-      row.appendChild(id);
+      // const id = document.createElement("td");
+      // id.textContent = record.id;
+      // row.appendChild(id);
 
       // subject name lookup
       const subjectCell = document.createElement("td");
