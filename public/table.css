@@ -8,7 +8,7 @@
 /* Table */
 table {
     width: 100%;
-    min-width: 420px; /* prevent columns from collapsing too much */
+    min-width: 500px; /* prevent columns from collapsing too much */
     border-collapse: collapse;
     margin-top: 20px;
     background-color: #fff;
@@ -74,7 +74,7 @@ table button {
 /* Responsive tweaks */
 @media (max-width: 768px) {
     table {
-        min-width: 500px; /* adjust for tablet */
+        min-width: 390px; /* adjust for tablet */
     }
     table th, table td {
         font-size: 12px;
@@ -84,7 +84,7 @@ table button {
 
 @media (max-width: 480px) {
     table {
-        min-width: 395px; /* adjust for small phones */
+        min-width: 350px; /* adjust for small phones */
     }
     table th, table td {
         font-size: 9px;
