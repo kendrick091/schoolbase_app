@@ -51,7 +51,7 @@ table tbody tr:hover {
 
 /* Inputs inside table */
 table input {
-    width: 70%;
+    width: 50%;
     border-radius: 6px;
     padding: 4px;
     font-size: 13px;
