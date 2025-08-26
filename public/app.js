@@ -141,6 +141,26 @@ navigator.serviceWorker.addEventListener("controllerchange", () => {
   window.location.reload();
 });
 
+//offline code
+const offlineBanner = document.getElementById("offline-banner");
+
+// Show banner when offline
+window.addEventListener("offline", () => {
+  offlineBanner.style.display = "block";
+});
+
+// Hide banner when online
+window.addEventListener("online", () => {
+  offlineBanner.style.display = "none";
+});
+
+document.getElementById("back-btn").addEventListener("click", () => {
+  if (window.history.length > 1) {
+    window.history.back(); // Go to previous page
+  } else {
+    window.location.href = "/index.html"; // fallback (home)
+  }
+});
 
 
 openDataBase();
