@@ -154,13 +154,20 @@ window.addEventListener("online", () => {
   offlineBanner.style.display = "none";
 });
 
-document.getElementById("back-btn").addEventListener("click", () => {
-  if (window.history.length > 1) {
-    window.history.back(); // Go to previous page
-  } else {
-    window.location.href = "/index.html"; // fallback (home)
+document.addEventListener("DOMContentLoaded", () => {
+  const backBtn = document.getElementById("back-btn");
+
+  if (backBtn) {
+    backBtn.addEventListener("click", () => {
+      if (window.history.length > 1) {
+        window.history.back();
+      } else {
+        window.location.href = "/index.html";
+      }
+    });
   }
 });
+
 
 
 openDataBase();
