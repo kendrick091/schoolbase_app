@@ -55,7 +55,7 @@ body, html {
     border-right: 1px solid #ddd;
     overflow-y: auto;
     z-index: 900;
-    padding-top: 20px;
+    padding-top: 25px;
 }
 
 .navSide ul {
