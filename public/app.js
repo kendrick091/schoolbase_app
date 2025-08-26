@@ -105,15 +105,42 @@ function openDataBase(){
     }
 }
 
-//SERVICE WORKER
+
 if ("serviceWorker" in navigator) {
-  window.addEventListener("load", () => {
-    navigator.serviceWorker
-      .register("/service-worker.js")
-      .then(() => console.log("Service Worker registered"))
-      .catch((err) => console.log("Service Worker failed", err));
-  });
+  navigator.serviceWorker.register("/service-worker.js")
+    .then((registration) => {
+      console.log("Service Worker registered");
+
+      // 🔥 Listen for new versions of the SW
+      registration.onupdatefound = () => {
+        const newWorker = registration.installing;
+        newWorker.onstatechange = () => {
+          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+            // Show update button
+            document.getElementById("update-btn").style.display = "block";
+          }
+        };
+      };
+    })
+    .catch((err) => console.error("SW registration failed:", err));
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const updateBtn = document.getElementById("update-btn");
+
+  if (updateBtn) {
+    updateBtn.addEventListener("click", () => {
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ action: "skipWaiting" });
+      }
+    });
+  }
+});
+
+navigator.serviceWorker.addEventListener("controllerchange", () => {
+  window.location.reload();
+});
+
 
 
 openDataBase();

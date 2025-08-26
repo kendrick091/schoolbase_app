@@ -1,9 +1,10 @@
-const CACHE_NAME = "schoolbase-cache-v1";
+const CACHE_NAME = "schoolbase-cache-v3"; // 🔥 increase version when updating
 const urlsToCache = [
   "/",
   "/index.html",
-  "/styleGpt.css",
+  "/style.css",
   "/app.js",
+  "/install.js",
   "/icons/logo-192.png",
   "/icons/logo-512.png"
 ];
@@ -11,26 +12,34 @@ const urlsToCache = [
 // Install
 self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then(async (cache) => {
-      for (const url of urlsToCache) {
-        try {
-          await cache.add(url);
-          console.log(`Cached: ${url}`);
-        } catch (err) {
-          console.error(`Failed to cache: ${url}`, err);
-        }
-      }
-    })
+    caches.open(CACHE_NAME)
+      .then((cache) => cache.addAll(urlsToCache))
+      .catch(err => console.error("Failed to cache:", err))
   );
+  self.skipWaiting(); // 🔥 activate new SW immediately
+});
+
+// Activate
+self.addEventListener("activate", (event) => {
+  event.waitUntil(
+    caches.keys().then((keys) =>
+      Promise.all(
+        keys.map((key) => {
+          if (key !== CACHE_NAME) {
+            return caches.delete(key);
+          }
+        })
+      )
+    )
+  );
+  self.clients.claim();
 });
 
 
 // Fetch
 self.addEventListener("fetch", (event) => {
   event.respondWith(
-    caches.match(event.request).then((response) => {
-      return response || fetch(event.request);
-    })
+    caches.match(event.request).then((response) => response || fetch(event.request))
   );
 });
 

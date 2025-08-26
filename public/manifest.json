@@ -1,6 +1,6 @@
 {
   "name": "schoolbase",
-  "short_name": "WebApp",
+  "short_name": "Schoolbase",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#ffffff",
