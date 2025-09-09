@@ -3,18 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>About Us</title>
+    <link rel="stylesheet" href="aboutus.css">
 </head>
 <body>
-    <div class="container">
-        <h1>About Us.</h1>
+    <div class="aboutUs-mp3">
+  <!-- Hidden audio element -->
+  <audio id="click-sound">
+    <source src="icons/ai-audio.mp3" type="audio/mpeg">
+  </audio>
 
-        <div class="aboutUs-mp3">
-            <audio id="click-sound">
-            <source src="icons/ai-audio.mp3" type="audio/mpeg">
-        </audio>
+  <!-- Custom audio controls -->
+  <div class="custom-audio">
+    <button id="playPauseBtn">▶ Play</button>
+  </div>
+
+  <!-- Volume slider -->
+  <div class="audioInput">
+    <label for="schoolbaseAudioVolum">Schoolbase Audio Volume</label><br>
+    <input id="schoolbaseAudioVolum" type="range" min="0" max="1" step="0.1" 
+           onchange="document.getElementById('click-sound').volume = this.value">
+  </div>
+  <div class="privacyPolicy">
+    <a href="privacy-policy.html">Privacy Policy</a>
+</div>
+
+</div>
+
+<!-- YouTube code Here -->
+       <div class="youTubeVideoList">
+        <h2>My YouTube Video</h2>
+
+        <div class="youTubeIframeDiv">
+        <!-- YouTube Embed -->
+        <iframe 
+            src="https://www.youtube.com/embed/RLCauruqy60" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+        </div>
+        <div class="youTubeIframeDiv">
+            <!-- YouTube Embed -->
+        <iframe 
+            src="https://www.youtube.com/embed/bOmhLHG-BrM" 
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+            allowfullscreen>
+        </iframe>
+        </div>
+       </div>
     </div>
     </div>
+
+
     
     <script src="aboutus.js"></script>
 </body>

@@ -1,11 +1,12 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const sound = document.getElementById("click-sound");
+const audio = document.getElementById("click-sound");
+const playPauseBtn = document.getElementById("playPauseBtn");
 
-  sound.play().catch(err => {
-    console.log("Autoplay blocked by browser. Will play on first click.");
-    // fallback: play on first user interaction
-    document.body.addEventListener("click", () => {
-      sound.play();
-    }, { once: true });
-  });
+playPauseBtn.addEventListener("click", () => {
+  if (audio.paused) {
+    audio.play();
+    playPauseBtn.textContent = "⏸ Pause";
+  } else {
+    audio.pause();
+    playPauseBtn.textContent = "▶ Play";
+  }
 });
