@@ -66,7 +66,7 @@ viewAdBtn.addEventListener('click', ()=>{
         if(countdown <= 0){
             clearInterval(interval);
             adContainer.style.display = "none";
-            giveReward(5);
+            giveReward(7);
             viewAdBtn.disabled = false;
         }
     }, 1000)
@@ -79,15 +79,4 @@ function giveReward(amount){
     rewardMsg.textContent = `You earned ${amount} gems!`;
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  const sound = document.getElementById("click-sound");
-
-  sound.play().catch(err => {
-    console.log("Autoplay blocked by browser. Will play on first click.");
-    // fallback: play on first user interaction
-    document.body.addEventListener("click", () => {
-      sound.play();
-    }, { once: true });
-  });
-});
 
