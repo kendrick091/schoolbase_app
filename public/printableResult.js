@@ -209,8 +209,33 @@ function loadResult() {
     } else {
       if (subjectCount > 0) {
         const average = (totalOverall / subjectCount).toFixed(2);
-        document.getElementById("summary").textContent =
-          `Total: ${totalOverall} | Average: ${average}`;
+        // document.getElementById("summary").textContent =
+        //   `Total: ${totalOverall} | Average: ${average}`;
+          const totalScore = document.getElementById('totalScore');
+          const averageScore = document.getElementById('averageScore');
+          const gradeScore = document.getElementById('gradeScore');
+
+          const totalTd = document.createElement('td')
+          const totalTd2 = document.createElement('td')
+          totalTd.textContent = `Total`;
+          totalTd2.textContent = `${totalOverall}`;
+          
+          const averageTd = document.createElement('td')
+          const averageTd2 = document.createElement('td')
+          averageTd.textContent = `Average`;
+          averageTd2.textContent = `${average}`;
+          
+          const gradeTd = document.createElement('td')
+          const gradeTd2 = document.createElement('td')
+          gradeTd.textContent = `Grade`;
+          gradeTd2.textContent = `${getGrade(average)}`;
+
+          totalScore.appendChild(totalTd);
+          totalScore.appendChild(totalTd2);
+          averageScore.appendChild(averageTd)
+          averageScore.appendChild(averageTd2)
+          gradeScore.appendChild(gradeTd)
+          gradeScore.appendChild(gradeTd2)
       } else {
         document.getElementById("summary").textContent =
           "No result found for this session and term.";
