@@ -1,59 +1,40 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>School Info Upload</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-    label, input {
-      display: block;
-      margin: 10px 0;
-    }
-    img {
-      max-width: 200px;
-      margin: 10px 0;
-      border: 1px solid #ccc;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>School Info Upload</title>
+  <link rel="stylesheet" href="schoolLogo.css">
 </head>
 <body>
-  <button id="back-btn" style="
-            background: #2196f3;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin: 10px;
-            ">
-            ⬅ Back
-            </button>
-            
-  <h2>Upload School Info</h2>
-  <label for="schoolName">School Name:</label>
-  <input type="text" id="schoolName" placeholder="Enter school name" />
-  
-  <label for="schoolAddress">School Address:</label>
-  <input type="text" id="schoolAddress" placeholder="Enter school Address" />
+  <div class="container">
+    <button id="back-btn" class="btn">⬅ Back</button>
+    <h2>Upload School Info</h2>
 
-  <label for="logoInput">School Logo:</label>
-  <input type="file" id="logoInput" accept="image/*" />
+    <label for="schoolName">School Name:</label>
+    <input type="text" id="schoolName" placeholder="Enter school name" />
 
-  <label for="extraImageInput">Other Image:</label>
-  <input type="file" id="extraImageInput" accept="image/*" />
+    <label for="schoolAddress">School Address:</label>
+    <input type="text" id="schoolAddress" placeholder="Enter school address" />
 
-  <button id="saveButton">Save</button>
-  <hr />
+    <label for="logoInput">School Logo:</label>
+    <input type="file" id="logoInput" accept="image/*" />
 
-  <h3>Stored Info</h3>
-  <p><strong>Name:</strong> <span id="storedName"></span></p>
-  <p><strong>Address:</strong> <span id="storedAddress"></span></p>
-  <p><strong>Logo:</strong><br><img id="storedLogo" /></p>
-  <p><strong>Other Image:</strong><br><img id="storedExtraImage" /></p>
+    <label for="extraImageInput">Other Image:</label>
+    <input type="file" id="extraImageInput" accept="image/*" />
+
+    <button id="saveButton" class="btn">💾 Save</button>
+
+    <hr />
+
+    <h3>Stored Info</h3>
+    <div class="stored-info">
+      <p><strong>Name:</strong> <span id="storedName"></span></p>
+      <p><strong>Address:</strong> <span id="storedAddress"></span></p>
+      <p><strong>Logo:</strong><br><img id="storedLogo" /></p>
+      <p><strong>Other Image:</strong><br><img id="storedExtraImage" /></p>
+    </div>
+  </div>
 
   <script type="module" src="schoolLogo.js"></script>
 </body>
