@@ -29,8 +29,9 @@ function saveSchoolInfo() {
   const name = document.getElementById("schoolName").value;
   const logoFile = document.getElementById("logoInput").files[0];
   const extraFile = document.getElementById("extraImageInput").files[0];
+  const address = document.getElementById('schoolAddress').value;
 
-  if (!name || !logoFile || !extraFile) {
+  if (!name || !logoFile || !extraFile || !address) {
     alert("Please provide all fields.");
     return;
   }
@@ -57,6 +58,7 @@ function saveSchoolInfo() {
         const newData = {
           id: 1,
           name,
+          address,
           logo: logoBlob,
           extra: extraBlob,
           recharge
@@ -85,6 +87,7 @@ function loadSchoolInfo() {
     const data = e.target.result;
     if (data) {
       document.getElementById("storedName").textContent = data.name;
+      document.getElementById("storedAddress").textContent = data.address;
       document.getElementById("storedLogo").src = URL.createObjectURL(data.logo);
       document.getElementById("storedExtraImage").src = URL.createObjectURL(data.extra);
       // Optionally show recharge:

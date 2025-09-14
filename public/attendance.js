@@ -1,47 +1,154 @@
+import { DB_NAME, DB_VERSION } from "./app.js";
+
 let db;
-
-import { DB_NAME, DB_VERSION } from './app.js';
-
 const request = indexedDB.open(DB_NAME, DB_VERSION);
 
-request.onupgradeneeded = (event)=>{
-    db = event.target.result
-}
+request.onupgradeneeded = (event) => {
+  const db = event.target.result;
 
-request.onerror = (event)=>{
-    console.Error('Error', event.target.error)
-};
-
-request.onsuccess = (event)=>{
-    db = event.target.result;
-    console.log('DB open for ATTENDANCE LOADED')
-    displayClass();
-};
-
-function displayClass() {
-    const tx = db.transaction(["classes"], "readonly");
-    const classStore = tx.objectStore("classes");
-    const classList = document.getElementById('listClass');
-    classList.innerHTML = "";
-
-    classStore.openCursor().onsuccess = function(event){
-        const cursor = event.target.result;
-        if(cursor){
-            const {id, className} = cursor.value;
-            const li = document.createElement('li');
-            const btnDiv = document.createElement('div');
-
-            const infoBtn = document.createElement('button');
-            infoBtn.textContent = `${className}`,
-            infoBtn.onclick = function(){
-                window.location.href = `classAttendance.html?id=${id}`
-            }
-
-            btnDiv.appendChild(infoBtn)
-            li.appendChild(btnDiv);
-
-            classList.appendChild(li);
-            cursor.continue();
-        }
+  if (!db.objectStoreNames.contains("attendance")) {
+    const store = db.createObjectStore("attendance", { keyPath: "id", autoIncrement: true });
+    store.createIndex("student_session_term", ["studentID", "sessionID", "term"], { unique: true });
+  } else {
+    const store = event.target.transaction.objectStore("attendance");
+    if (!store.indexNames.contains("student_session_term")) {
+      store.createIndex("student_session_term", ["studentID", "sessionID", "term"], { unique: true });
     }
+  }
+};
+
+
+request.onsuccess = (event) => {
+  db = event.target.result;
+  loadSessions();
+  loadClasses();
+};
+
+request.onerror = () => console.error("Error opening database");
+
+// Load sessions into dropdown
+function loadSessions() {
+  const sessionSelect = document.getElementById("sessionSelect");
+  const tx = db.transaction("session", "readonly");
+  const store = tx.objectStore("session");
+
+  store.openCursor().onsuccess = (e) => {
+    const cursor = e.target.result;
+    if (cursor) {
+      const opt = document.createElement("option");
+      opt.value = cursor.value.id;
+      opt.textContent = cursor.value.session;
+      sessionSelect.appendChild(opt);
+      cursor.continue();
+    }
+  };
 }
+
+// Load classes into dropdown
+function loadClasses() {
+  const classSelect = document.getElementById("classSelect");
+  const tx = db.transaction("classes", "readonly");
+  const store = tx.objectStore("classes");
+
+  store.openCursor().onsuccess = (e) => {
+    const cursor = e.target.result;
+    if (cursor) {
+      const opt = document.createElement("option");
+      opt.value = cursor.value.id;
+      opt.textContent = cursor.value.className;
+      classSelect.appendChild(opt);
+      cursor.continue();
+    }
+  };
+}
+
+// Load students when button clicked
+document.getElementById("loadStudents").addEventListener("click", () => {
+  const sessionID = Number(document.getElementById("sessionSelect").value);
+  const classID = Number(document.getElementById("classSelect").value);
+  const term = Number(document.getElementById("termSelect").value);
+
+  const studentList = document.getElementById("studentList");
+  studentList.innerHTML = "";
+
+  const tx = db.transaction("session_students", "readonly");
+  const store = tx.objectStore("session_students");
+
+  store.openCursor().onsuccess = (e) => {
+    const cursor = e.target.result;
+    if (cursor) {
+      const record = cursor.value;
+      if (record.sessionID === sessionID && record.classID === classID) {
+        // Get student details
+        const studentTx = db.transaction("students", "readonly");
+        const studentStore = studentTx.objectStore("students");
+        studentStore.get(record.studentID).onsuccess = (s) => {
+          const student = s.target.result;
+          if (student) {
+            const li = document.createElement("li");
+            li.innerHTML = `
+              <label>
+                <input type="checkbox" name="student" value="${student.id}">
+                ${student.surName} ${student.firstName} ${student.otherName || ""}
+              </label>
+            `;
+            studentList.appendChild(li);
+          }
+        };
+      }
+      cursor.continue();
+    }
+  };
+});
+
+// Save attendance
+document.getElementById("attendanceForm").addEventListener("submit", (e) => {
+  e.preventDefault();
+
+  const sessionID = Number(document.getElementById("sessionSelect").value);
+  const classID = Number(document.getElementById("classSelect").value);
+  const term = Number(document.getElementById("termSelect").value);
+
+  const checkboxes = document.querySelectorAll("input[name='student']");
+  
+  const tx = db.transaction("attendance", "readwrite");
+  const store = tx.objectStore("attendance");
+
+  checkboxes.forEach((cb) => {
+    const studentID = Number(cb.value);
+    const present = cb.checked;
+
+    // Check if record exists for this student/session/term
+    const index = store.index("student_session_term");
+    const getReq = index.get([studentID, sessionID, term]);
+
+    getReq.onsuccess = (event) => {
+      let record = event.target.result;
+
+      if (record) {
+        // Update existing record
+        record.totalDays += 1;
+        if (present) {
+          record.presentDays += 1;
+        } else {
+          record.absentDays += 1;
+        }
+        store.put(record);
+      } else {
+        // New record
+        store.put({
+          studentID,
+          sessionID,
+          term,
+          totalDays: 1,
+          presentDays: present ? 1 : 0,
+          absentDays: present ? 0 : 1
+        });
+      }
+    };
+  });
+
+  tx.oncomplete = () => {
+    alert("Attendance saved successfully!");
+  };
+});

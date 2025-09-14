@@ -72,7 +72,7 @@ function showSession(){
         document.getElementById('sessionShow').innerHTML = 
           `<h2 style="border-radius: 14px; padding: 3px;
           margin: 20px 20px; background: rgba(161, 167, 78, 0.62)">Active session<br>
-          <span style="padding: 3px; color: rgba(3, 86, 119, 0.79)">Add a School Session</span></h2>`
+          <span style="padding: 3px; color: rgba(3, 86, 119, 0.79)">Add an Academic Session</span></h2>`
       }
     }
     }

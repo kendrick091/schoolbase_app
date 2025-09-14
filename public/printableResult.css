@@ -9,6 +9,20 @@ body{
   background: white;
 }
 
+.schoolInfo{
+  display: flex;
+  width: 100%;
+}
+
+.schoolInfo .logoHeader{
+  width: 15%;
+}
+
+.schoolInfo .centerHeader{
+  text-align: center;
+  width: 70%;
+}
+
 .headTableDiv{
   display: flex;
   justify-content: space-between;
@@ -29,6 +43,10 @@ th, td {
 }
 th {
   background-color: #f0f0f0;
+}
+
+.attendanceDIV{
+  width: 30%;
 }
 
 .printDiv{

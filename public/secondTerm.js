@@ -419,34 +419,3 @@ async function displayTable() {
     cursor.continue();
   };
 }
-
-// ======== Attendance2 Info ========
-
-async function attInfo() {
-  let sessionID;
-  try {
-    sessionID = await getCurrentSessionId();
-  } catch (err) {
-    alert(err.message);
-    return;
-  }
-
-  const transaction = db.transaction("attendance2", "readonly");
-  const store = transaction.objectStore("attendance2");
-
-  const attendance2Info = document.getElementById("attendance2-info");
-  let count = 0;
-
-  store.openCursor().onsuccess = (event) => {
-    const cursor = event.target.result;
-    if (!cursor) return;
-
-    const { studentID, sessionID: sID } = cursor.value;
-    if (toInt(userId) === toInt(studentID) && toInt(sID) === toInt(sessionID)) {
-      count += 1;
-      attendance2Info.textContent = count;
-      attendance2Info.style.color = "#aa025f";
-    }
-    cursor.continue();
-  };
-}

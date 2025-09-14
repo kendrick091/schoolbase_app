@@ -420,34 +420,3 @@ async function displayTable() {
     cursor.continue();
   };
 }
-
-// ======== Attendance Info ========
-
-async function attInfo() {
-  let sessionID;
-  try {
-    sessionID = await getCurrentSessionId();
-  } catch (err) {
-    alert(err.message);
-    return;
-  }
-
-  const transaction = db.transaction("attendance", "readonly");
-  const store = transaction.objectStore("attendance");
-
-  const attendanceInfo = document.getElementById("attendance-info");
-  let count = 0;
-
-  store.openCursor().onsuccess = (event) => {
-    const cursor = event.target.result;
-    if (!cursor) return;
-
-    const { studentID, sessionID: sID } = cursor.value;
-    if (toInt(userId) === toInt(studentID) && toInt(sID) === toInt(sessionID)) {
-      count += 1;
-      attendanceInfo.textContent = count;
-      attendanceInfo.style.color = "#aa025f";
-    }
-    cursor.continue();
-  };
-}

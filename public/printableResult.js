@@ -18,6 +18,7 @@ request.onsuccess = (event) => {
   db = event.target.result;
   loadStudentInfo();
   loadResult();
+  loadAttendance();
 };
 
 //School logo
@@ -32,27 +33,41 @@ function renderSchoolHeaderAndFooter() {
 
     // Header (top of result)
     const headerDiv = document.createElement("div");
-    headerDiv.style.textAlign = "center";
-    headerDiv.style.marginBottom = "15px";
+    headerDiv.classList = 'logoHeader'
+
+    const subHeaderDiv = document.createElement("div");
+    subHeaderDiv.classList = 'centerHeader'
+    
+    const lastHeaderDiv = document.createElement("div");
+    lastHeaderDiv.classList = 'logoHeader'
 
     const logoImg = document.createElement("img");
     logoImg.src = URL.createObjectURL(school.logo);
     logoImg.alt = "School Logo";
-    logoImg.style.width = "80px";
-    logoImg.style.height = "80px";
+    logoImg.style.width = "90%";
+    logoImg.style.height = "90%";
     logoImg.style.objectFit = "contain";
     logoImg.style.display = "block";
     logoImg.style.margin = "0 auto 5px";
 
-    const schoolName = document.createElement("h2");
+    const schoolName = document.createElement("h1");
     schoolName.textContent = school.name;
     schoolName.style.margin = "0";
-    schoolName.style.fontSize = "20px";
+    schoolName.style.fontSize = "25px";
 
+    const schoolAddress = document.createElement('h2');
+    schoolAddress.textContent = school.address;
+    schoolAddress.style.margin = "0";
+    schoolAddress.style.fontSize = "18px";
+    
+    
     headerDiv.appendChild(logoImg);
-    headerDiv.appendChild(schoolName);
+    subHeaderDiv.appendChild(schoolName);
+    subHeaderDiv.appendChild(schoolAddress);
 
     document.getElementById('schoolLogoDiv').appendChild(headerDiv)
+    document.getElementById('schoolLogoDiv').appendChild(subHeaderDiv)
+    document.getElementById('schoolLogoDiv').appendChild(lastHeaderDiv)
 
     // resultDiv.prepend(headerDiv); // ✅ Add to top of resultDiv
   };
@@ -144,15 +159,60 @@ request.onsuccess = (event) => {
 
 
   // Term
+  function termDefined(terms) {
+    if(terms == 1) return "1st"
+    if(terms == 2) return "2nd"
+    if(terms == 3) return "3rd"
+
+    console.log(terms)
+  }
+
   let tableRowTerm = document.createElement('tr');
       let titleTerm = document.createElement('td')
       let termTable = document.createElement('td')
       titleTerm.textContent = `Term:`;
-      termTable.textContent = `${term} Term`;
+      termTable.textContent = `${termDefined(term)} Term`;
       tableRowTerm.appendChild(titleTerm)
       tableRowTerm.appendChild(termTable)
 
       studentTh2.appendChild(tableRowTerm)
+}
+
+function loadAttendance() {
+  const tx = db.transaction("attendance", "readonly");
+  const store = tx.objectStore("attendance");
+  const index = store.openCursor();
+
+  index.onsuccess = (event) => {
+    const cursor = event.target.result;
+    if (cursor) {
+      const record = cursor.value;
+      if (
+        record.studentID === studentId &&
+        record.sessionID === sessionId &&
+        record.term === term
+      ) {
+        document.getElementById("attendanceDiv").innerHTML = `
+          <table style="width: 100%; font-size: 12px;
+          text-align: left">
+          <h3 style="text-align: left">Attendance</h3>
+          <tr>
+          <th>Total Days</th>
+          <th>Present</th>
+          <th>Absent</th>
+          </tr>
+          <tr>
+          <td>${record.totalDays}</td>
+          <td>${record.presentDays}</td>
+          <td>${record.absentDays}</td>
+          </tr>
+          </table>
+        `;
+        return;
+      }
+      cursor.continue();
+    }
+  };
 }
 
 
@@ -217,7 +277,7 @@ function loadResult() {
 
           const totalTd = document.createElement('td')
           const totalTd2 = document.createElement('td')
-          totalTd.textContent = `Total`;
+          totalTd.textContent = `Total Score`;
           totalTd2.textContent = `${totalOverall}`;
           
           const averageTd = document.createElement('td')

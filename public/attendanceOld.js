@@ -34,7 +34,7 @@ function displayClass() {
             const infoBtn = document.createElement('button');
             infoBtn.textContent = `${className}`,
             infoBtn.onclick = function(){
-                window.location.href = `classAttendance3.html?id=${id}`
+                window.location.href = `classAttendance.html?id=${id}`
             }
 
             btnDiv.appendChild(infoBtn)

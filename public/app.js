@@ -46,12 +46,10 @@ function openDataBase(){
         }
 
         //Attendance store
-        if(!db.objectStoreNames.contains('attendance')){
-            const attendanceStore = db.createObjectStore('attendance', {keyPath: 'id', autoIncrement: true})
-            attendanceStore.createIndex('studentID', 'studentID', {unique: false});
-            attendanceStore.createIndex('date','date',{unique: false});
-            attendanceStore.createIndex('sessionID','sessionID',{unique: false});
-        }
+        if (!db.objectStoreNames.contains("attendance")) {
+            const store = db.createObjectStore("attendance", { keyPath: "id", autoIncrement: true });
+            store.createIndex("student_session_term", ["studentID", "sessionID", "term"], { unique: true });
+          }
         if(!db.objectStoreNames.contains('attendance2')){
             const attendanceStore = db.createObjectStore('attendance2', {keyPath: 'id', autoIncrement: true})
             attendanceStore.createIndex('studentID', 'studentID', {unique: false});

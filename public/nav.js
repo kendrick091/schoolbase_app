@@ -54,7 +54,7 @@ subjectListBtn.addEventListener('click', function(){
 })
 
 attendanceBtn.addEventListener('click', function(){
-    window.location.href = `attendanceEntry.html`;
+    window.location.href = `attendance.html`;
 })
 
 resultBtn.addEventListener('click', function(){
