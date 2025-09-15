@@ -2,7 +2,7 @@ let db;
 import { DB_NAME,DB_VERSION } from './app.js';
 
 const request = indexedDB.open(DB_NAME, DB_VERSION);
-const STORES = ["thirdTerm", "attendance3"];
+const STORES = ["thirdTerm", "attendance"];
 
 request.onupgradeneeded = (event)=>{
     db = event.target.result;
@@ -90,7 +90,7 @@ function importAndMergethirdTerm(data) {
 }
 
 // ====== EVENT LISTENERS ======
-document.getElementById("exportBtn2")?.addEventListener("click", exportthirdTermData);
+document.getElementById("exportBtn3")?.addEventListener("click", exportthirdTermData);
 
 
 document.getElementById("importthirdTermBtn")?.addEventListener("click", () => {

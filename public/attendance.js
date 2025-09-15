@@ -150,5 +150,6 @@ document.getElementById("attendanceForm").addEventListener("submit", (e) => {
 
   tx.oncomplete = () => {
     alert("Attendance saved successfully!");
+    location.reload();
   };
 });

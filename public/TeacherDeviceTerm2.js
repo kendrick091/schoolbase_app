@@ -2,7 +2,7 @@ let db;
 import { DB_NAME,DB_VERSION } from './app.js';
 
 const request = indexedDB.open(DB_NAME, DB_VERSION);
-const STORES = ["secondTerm", "attendance2"];
+const STORES = ["secondTerm", "attendance"];
 
 request.onupgradeneeded = (event)=>{
     db = event.target.result;

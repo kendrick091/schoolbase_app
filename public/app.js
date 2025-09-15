@@ -1,4 +1,4 @@
-export const DB_NAME = "School_Base";
+export const DB_NAME = "SchoolBase";
 export const DB_VERSION = 1;
 
 let db;
@@ -50,19 +50,7 @@ function openDataBase(){
             const store = db.createObjectStore("attendance", { keyPath: "id", autoIncrement: true });
             store.createIndex("student_session_term", ["studentID", "sessionID", "term"], { unique: true });
           }
-        if(!db.objectStoreNames.contains('attendance2')){
-            const attendanceStore = db.createObjectStore('attendance2', {keyPath: 'id', autoIncrement: true})
-            attendanceStore.createIndex('studentID', 'studentID', {unique: false});
-            attendanceStore.createIndex('date','date',{unique: false});
-            attendanceStore.createIndex('sessionID','sessionID',{unique: false});
-        }
-        if(!db.objectStoreNames.contains('attendance3')){
-            const attendanceStore = db.createObjectStore('attendance3', {keyPath: 'id', autoIncrement: true})
-            attendanceStore.createIndex('studentID', 'studentID', {unique: false});
-            attendanceStore.createIndex('date','date',{unique: false});
-            attendanceStore.createIndex('sessionID','sessionID',{unique: false});
-        }
-
+        
         //Subject store
         if(!db.objectStoreNames.contains('subjectStore')){
             const subjectStore = db.createObjectStore('subjectStore', {keyPath: 'id', autoIncrement: true});
