@@ -1,5 +1,5 @@
 export const DB_NAME = "SchoolBase";
-export const DB_VERSION = 1;
+export const DB_VERSION = 2;
 
 let db;
 

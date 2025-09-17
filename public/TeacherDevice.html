@@ -25,6 +25,14 @@
     <button id="importBtn">Import Admin Data</button>
     <input type="file" id="importFile" accept=".json" style="display:none;">
 
+     <div class="termShareDiv">
+        <!-- Attendance Buttons -->
+    <button id="exportAttendanceBtn">Export Attendance</button>
+    <input type="file" id="importAttendanceFile" style="display:none" />
+    <button id="importAttendanceBtn">Import Attendance</button>
+
+     </div>
+
 <div class="termShareDiv">
     <!-- Teacher: only uses export button -->
     <button id="exportBtn">Export First Term Data</button>
@@ -50,6 +58,7 @@
     <button id="importthirdTermBtn">Import & Merge Third Term Data</button>
 </div>
 
+  <script type="module" src="attendanceShare.js"></script>
   <script type="module" src="TeacherDevice.js"></script>
   <script type="module" src="TeacherDeviceTerm2.js"></script>
   <script type="module" src="TeacherDeviceTerm3.js"></script>

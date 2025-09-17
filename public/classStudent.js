@@ -155,7 +155,7 @@ document.getElementById('confirmPromotion').onclick = function () {
         if (studentData) {
             studentData.classID = newClassId;
             store.put(studentData);
-            alert(`Student promoted to class ID ${newClassId}!`);
+            console.log(`Student promoted to class ID ${newClassId}!`);
             document.getElementById('promotionModal').style.display = 'none';
             displayInfo(); // Refresh table
         }

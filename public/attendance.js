@@ -99,6 +99,7 @@ document.getElementById("loadStudents").addEventListener("click", () => {
       cursor.continue();
     }
   };
+  loadAttendanceTable(sessionID, classID, term);
 });
 
 // Save attendance
@@ -139,6 +140,7 @@ document.getElementById("attendanceForm").addEventListener("submit", (e) => {
         store.put({
           studentID,
           sessionID,
+          classID,
           term,
           totalDays: 1,
           presentDays: present ? 1 : 0,
@@ -153,3 +155,50 @@ document.getElementById("attendanceForm").addEventListener("submit", (e) => {
     location.reload();
   };
 });
+
+function loadAttendanceTable(sessionID, classID, term) {
+  const tbody = document.querySelector("#attendanceTable tbody");
+  tbody.innerHTML = "";
+
+  const tx = db.transaction(["attendance", "students"], "readonly");
+  const attendanceStore = tx.objectStore("attendance");
+  const studentStore = tx.objectStore("students");
+
+  attendanceStore.getAll().onsuccess = (e) => {
+    const records = e.target.result.filter(
+      (r) =>
+        String(r.sessionID) === String(sessionID) &&
+        String(r.classID) === String(classID) &&
+        String(r.term) === String(term)
+    );
+
+    if (records.length === 0) {
+      const row = document.createElement("tr");
+      const cell = document.createElement("td");
+      cell.colSpan = 7;
+      cell.textContent = "No attendance records found.";
+      row.appendChild(cell);
+      tbody.appendChild(row);
+      return;
+    }
+
+    records.forEach((rec) => {
+      const studentReq = studentStore.get(rec.studentID);
+      
+      studentReq.onsuccess = () => {
+        const student = studentReq.result;
+        const fullName = student.firstName + ' '+ student.surName
+        const studentName = student ? fullName : `ID ${rec.studentID}`;
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${studentName}</td>
+          <td>${rec.totalDays}</td>
+          <td style="color: green;">${rec.presentDays}</td>
+          <td style="color: red;">${rec.absentDays}</td>
+        `;
+        tbody.appendChild(row);
+      };
+    });
+  };
+}

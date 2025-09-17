@@ -31,7 +31,6 @@ request.onsuccess = async (event) => {
   displayCheckbox();
   studentNameDisplay();
   await displayTable();
-  await attInfo();
 };
 
 // ======== Show Recharge (Gems) ========
