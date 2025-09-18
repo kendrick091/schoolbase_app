@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Class Attendance</title>
   <link rel="stylesheet" href="attendance.css">
+  <link rel="stylesheet" href="table.css">
 </head>
 <body>
   <button id="back-btn">
@@ -36,6 +37,17 @@
       <button type="submit" class="btn">Save Attendance</button>
     </form>
   </div>
+  <table id="attendanceTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Total Days</th>
+        <th>Days Present</th>
+        <th>Days Absent</th>
+      </tr>
+      <tbody></tbody>
+    </thead>
+  </table>
 
   <script type="module" src="attendance.js"></script>
 </body>
