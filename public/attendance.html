@@ -2,44 +2,29 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Class Attendance</title>
   <link rel="stylesheet" href="attendance.css">
-  <link rel="stylesheet" href="table.css">
 </head>
 <body>
-  <div class="container">
-        <button id="back-btn" style="
-            background: #2196f3;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            margin: 10px;
-            ">
+  <button id="back-btn">
             ⬅ Back
             </button>
   <h1>Class Attendance</h1>
 
   <div class="form-section">
-    <div class="form-section-input">
-    <label for="sessionSelect">Session:</label><br>
+    <label for="sessionSelect">Session:</label>
     <select id="sessionSelect"></select>
-    </div>
 
-     <div class="form-section-input">
-    <label for="classSelect">Class:</label><br>
+    <label for="classSelect">Class:</label>
     <select id="classSelect"></select>
-    </div>
 
-     <div class="form-section-input">
-    <label for="termSelect">Term:</label><br>
+    <label for="termSelect">Term:</label>
     <select id="termSelect">
       <option value="1">1st Term</option>
       <option value="2">2nd Term</option>
       <option value="3">3rd Term</option>
     </select>
-    </div>
 
     <button id="loadStudents" class="btn">Load Students</button>
   </div>
@@ -50,22 +35,6 @@
       <ul id="studentList"></ul>
       <button type="submit" class="btn">Save Attendance</button>
     </form>
-  </div>
-  <div class="attendance-table-section">
-  <h2>Attendance Records</h2>
-  <table id="attendanceTable">
-    <thead>
-      <tr>
-        <th>Student ID</th>
-        <th>Total Days</th>
-        <th>Present</th>
-        <th>Absent</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-</div>
-
   </div>
 
   <script type="module" src="attendance.js"></script>
