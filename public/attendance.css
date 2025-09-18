@@ -34,9 +34,10 @@ label{
 
 .form-section-input select{
   padding: 2%;
-  font-size: 16px;
+  font-size: 25px;
   width: 100%;
   cursor: pointer;
+  font-weight: bold;
 }
 
 button{
