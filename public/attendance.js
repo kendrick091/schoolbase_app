@@ -188,7 +188,7 @@ function loadAttendanceTable(sessionID, classID, term) {
       studentReq.onsuccess = () => {
         const student = studentReq.result;
         const fullName = student.firstName + ' '+ student.surName
-        const studentName = student ? fullName : `ID ${rec.studentID}`;
+        let studentName = student ? fullName : `ID ${rec.studentID}`;
 
         const row = document.createElement("tr");
         row.innerHTML = `
