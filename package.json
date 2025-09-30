@@ -18,6 +18,8 @@
   "homepage": "https://github.com/kendrick091/schoolbase_app#readme",
   "description": "",
   "dependencies": {
+    "@capacitor-community/admob": "^7.0.3",
+    "@capacitor/android": "^7.4.3",
     "@capacitor/cli": "^7.4.3",
     "@capacitor/core": "^7.4.3",
     "express": "^5.1.0",

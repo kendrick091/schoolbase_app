@@ -61,7 +61,7 @@ h2 {
 }
 
 @media print {
-    #printBtn{
+    .footer{
         display: none
     }
 }

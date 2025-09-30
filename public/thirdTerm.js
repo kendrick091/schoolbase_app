@@ -27,48 +27,21 @@ request.onerror = () => {
 
 request.onsuccess = async (event) => {
   db = event.target.result;
-  displayRecharge(); // Show gems on load
   displayCheckbox();
   studentNameDisplay();
   await displayTable();
-  await attInfo();
 };
-
-// ======== Show Recharge (Gems) ========
-
-function displayRecharge() {
-  const tx = db.transaction("school", "readonly");
-  const store = tx.objectStore("school");
-  const req = store.get(1);
-
-  req.onsuccess = () => {
-    const data = req.result;
-    const rechargeElem = document.getElementById("recharge-info");
-    if (rechargeElem) {
-      rechargeElem.textContent = data ? data.recharge : 0;
-      rechargeElem.style.color = "#007bff"; // blue
-      rechargeElem.style.fontWeight = "bold";
-    }
-  };
-  req.onerror = () => {
-    console.error("Error reading recharge");
-  };
-}
-
 
 // ======== Helpers ========
 
-// Get the *latest* student's sessionID (mirrors your original logic)
 function getCurrentSessionId() {
   return new Promise((resolve, reject) => {
     const tx = db.transaction("students", "readonly");
     const store = tx.objectStore("students");
-    const req = store.get(userId); // get by ID
+    const req = store.get(userId);
 
     req.onsuccess = () => {
-      if (!req.result) {
-        return;
-      }
+      if (!req.result) return;
       resolve(req.result.sessionID);
     };
     req.onerror = () => reject(new Error("Failed to read students store"));
@@ -79,13 +52,10 @@ function getCurrentClassId() {
   return new Promise((resolve, reject) => {
     const tx = db.transaction("students", "readonly");
     const store = tx.objectStore("students");
-    const req = store.get(userId); // get by ID
+    const req = store.get(userId);
 
     req.onsuccess = () => {
-      if (!req.result) {
-        reject(new Error("Student not found. If no student create student please."));
-        return;
-      }
+      if (!req.result) return;
       resolve(req.result.classID);
     };
     req.onerror = () => reject(new Error("Failed to read students store"));
@@ -116,7 +86,7 @@ function displayCheckbox() {
   const subjectsStore = transaction.objectStore("subjectStore");
 
   const container = document.getElementById("checkboxContainer");
-  container.innerHTML = ""; // clear
+  container.innerHTML = "";
 
   subjectsStore.openCursor().onsuccess = function (event) {
     const cursor = event.target.result;
@@ -139,7 +109,6 @@ function displayCheckbox() {
   };
 }
 
-// Add selected subjects to thirdTerm
 document.getElementById("submitSubjects").addEventListener("click", async function () {
   const checkboxes = document.querySelectorAll("input[name='subjectCheckbox']:checked");
 
@@ -169,7 +138,6 @@ document.getElementById("submitSubjects").addEventListener("click", async functi
       ca1: 0,
       ca2: 0,
       ca3: 0,
-      ca4: 0,
       exam: 0,
       session: toInt(sessionID),
     });
@@ -177,7 +145,7 @@ document.getElementById("submitSubjects").addEventListener("click", async functi
 
   tx.oncomplete = async () => {
     alert("Selected subjects saved.");
-    await displayTable(); // refresh table only (no full page reload)
+    await displayTable();
   };
 
   tx.onerror = () => {
@@ -230,12 +198,6 @@ async function displayTable() {
     if (toInt(record.studentID) === toInt(userId) && toInt(record.session) === toInt(sessionID)) {
       const row = document.createElement("tr");
 
-      // id cell
-      // const id = document.createElement("td");
-      // id.textContent = record.id;
-      // row.appendChild(id);
-
-      // subject name lookup
       const subjectCell = document.createElement("td");
       row.appendChild(subjectCell);
 
@@ -247,7 +209,6 @@ async function displayTable() {
         subjectCell.textContent = subject ? subject.subjects : "Unknown subject";
       };
 
-      // Editable cells (number inputs)
       const makeNumberInputCell = (value = 0) => {
         const td = document.createElement("td");
         const input = document.createElement("input");
@@ -262,16 +223,13 @@ async function displayTable() {
       const ca1 = makeNumberInputCell(record.ca1);
       const ca2 = makeNumberInputCell(record.ca2);
       const ca3 = makeNumberInputCell(record.ca3);
-      // If you later need ca4, uncomment below and adjust totals
-      // const ca4 = makeNumberInputCell(record.ca4);
 
       row.appendChild(ca1.td);
       row.appendChild(ca2.td);
       row.appendChild(ca3.td);
-      // row.appendChild(ca4.td);
 
       const caSumCell = document.createElement("td");
-      const calcCA = () => toInt(ca1.input.value) + toInt(ca2.input.value) + toInt(ca3.input.value); // + toInt(ca4.input.value)
+      const calcCA = () => toInt(ca1.input.value) + toInt(ca2.input.value) + toInt(ca3.input.value);
       caSumCell.textContent = calcCA();
       caSumCell.style.fontWeight = "bold";
       row.appendChild(caSumCell);
@@ -289,7 +247,6 @@ async function displayTable() {
       gradeCell.textContent = getGrade(calcGrand());
       row.appendChild(gradeCell);
 
-      // Live recompute on input
       [ca1.input, ca2.input, ca3.input, exam.input].forEach((inp) =>
         inp.addEventListener("input", () => {
           caSumCell.textContent = calcCA();
@@ -301,110 +258,54 @@ async function displayTable() {
       // Actions
       const action = document.createElement("td");
 
-      // EDIT (save)
+      // EDIT (save directly, no recharge)
       const editBtn = document.createElement("button");
       editBtn.textContent = "Edit";
       editBtn.addEventListener("click", async () => {
-        // Require active sessionID (from latest student – your existing approach)
         if (!sessionID) {
           alert("No session registered! Please activate a session.");
           return;
         }
 
-        // Check recharge (Gem)
-        const tx = db.transaction("school", "readwrite");
-        const store = tx.objectStore("school");
-        const rechargeReq = store.get(1);
-
-        rechargeReq.onsuccess = () => {
-          const data = rechargeReq.result;
-          if (!data) {
-            alert("Please register your school.");
-            return;
-          }
-
-          if (toInt(data.recharge) > 0) {
-            // Deduct one gem
-            data.recharge = toInt(data.recharge) - 1;
-            store.put(data);
-
-            // Update thirdTerm record
-            const updatethirdTerm = {
-              id: toInt(record.id),
-              studentID: toInt(userId),
-              subjectID: toInt(record.subjectID),
-              classID: toInt(record.classID),
-              ca1: toInt(ca1.input.value),
-              ca2: toInt(ca2.input.value),
-              ca3: toInt(ca3.input.value),
-              // ca4: toInt(ca4.input.value),
-              exam: toInt(exam.input.value),
-              session: toInt(sessionID),
-            };
-
-            const uTx = db.transaction("thirdTerm", "readwrite");
-            const thirdTerm = uTx.objectStore("thirdTerm");
-            const putReq = thirdTerm.put(updatethirdTerm);
-
-            putReq.onsuccess = async () => {
-                displayRecharge(); // refresh gem count
-                await displayTable(); // Refresh the row display
-            };
-            putReq.onerror = () => {
-              alert("Error updating score.");
-            };
-          } else {
-            alert("Gem " + data.recharge + " — Please increase Gem.");
-          }
+        const updatethirdTerm = {
+          id: toInt(record.id),
+          studentID: toInt(userId),
+          subjectID: toInt(record.subjectID),
+          classID: toInt(record.classID),
+          ca1: toInt(ca1.input.value),
+          ca2: toInt(ca2.input.value),
+          ca3: toInt(ca3.input.value),
+          exam: toInt(exam.input.value),
+          session: toInt(sessionID),
         };
 
-        rechargeReq.onerror = () => {
-          console.error("Error reading recharge data");
+        const uTx = db.transaction("thirdTerm", "readwrite");
+        const thirdTerm = uTx.objectStore("thirdTerm");
+        const putReq = thirdTerm.put(updatethirdTerm);
+
+        putReq.onsuccess = async () => {
+          await displayTable();
+        };
+        putReq.onerror = () => {
+          alert("Error updating score.");
         };
       });
       action.appendChild(editBtn);
 
-      // DELETE
+      // DELETE (no gem deduction)
       const deleteBtn = document.createElement("button");
       deleteBtn.textContent = "Delete";
       deleteBtn.style.background = "red";
       deleteBtn.style.border = "none";
 
-      deleteBtn.addEventListener("click", () => {
+      deleteBtn.addEventListener("click", async () => {
         const dTx = db.transaction("thirdTerm", "readwrite");
         const ft = dTx.objectStore("thirdTerm");
         const delReq = ft.delete(toInt(record.id));
 
-        delReq.onsuccess = () => {
-          // NOTE: Your original code deducts a gem on delete. Keeping that behavior.
-          const tx2 = db.transaction("school", "readwrite");
-          const store2 = tx2.objectStore("school");
-          const rechargeReq2 = store2.get(1);
-
-          rechargeReq2.onsuccess = async (e2) => {
-            const data2 = e2.target.result;
-            if (!data2) {
-              // no school data
-              await displayTable();
-              return;
-            }
-
-            if (toInt(data2.recharge) > 0) {
-              data2.recharge = toInt(data2.recharge) - 1;
-              store2.put(data2);
-            } else {
-              alert("Gem " + data2.recharge + " — Please increase Gem.");
-            }
-
-            alert("Subject Deleted!");
-            displayRecharge(); // refresh gem count
-            await displayTable();
-          };
-
-          rechargeReq2.onerror = async () => {
-            console.error("Error using recharge data");
-            await displayTable();
-          };
+        delReq.onsuccess = async () => {
+          alert("Subject Deleted!");
+          await displayTable();
         };
 
         delReq.onerror = () => {
