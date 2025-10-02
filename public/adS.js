@@ -9,7 +9,7 @@
       adDiv.innerHTML = `
         <ins class="adsbygoogle"
              style="display:block"
-             data-ad-client="ca-pub-XXXXXXXXXXXX"
+             data-ad-client="ca-pub-3576699728102241"
              data-ad-slot="${slotId}"
              data-ad-format="${format}"
              data-ad-layout="${layout}"
