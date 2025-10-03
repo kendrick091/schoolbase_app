@@ -70,6 +70,8 @@ function displayClass() {
             const {id, className} = cursor.value;
             const li = document.createElement('li');
             const btnDiv = document.createElement('div');
+            btnDiv.style.display = 'flex';
+            btnDiv.style.justifyContent = 'space-between';
             
             li.innerHTML = `${className}<br>`;
 
@@ -93,27 +95,27 @@ function displayClass() {
                 window.location.href = `classStudent.html?id=${id}`
             }
 
-            const deleteBtn = document.createElement('button');
-            deleteBtn.textContent = "Del"
-            deleteBtn.style.color = 'red';
-            deleteBtn.style.border = 'none';
-            deleteBtn.onclick = function(){
-                const deleteTeacher = db.transaction('classes', 'readwrite');
-                const store = deleteTeacher.objectStore('classes');
-                const teacherDel = store.delete(id);
+            // const deleteBtn = document.createElement('button');
+            // deleteBtn.textContent = "Del"
+            // deleteBtn.style.color = 'red';
+            // deleteBtn.style.border = 'none';
+            // deleteBtn.onclick = function(){
+            //     const deleteTeacher = db.transaction('classes', 'readwrite');
+            //     const store = deleteTeacher.objectStore('classes');
+            //     const teacherDel = store.delete(id);
 
-                teacherDel.onsuccess = ()=>{
-                    alert('Class Deleted!')
-                    location.reload();
-                }
-                teacherDel.onerror = ()=>{
-                    console.error('Class delete Error')
-                }
-            }
+            //     teacherDel.onsuccess = ()=>{
+            //         alert('Class Deleted!')
+            //         location.reload();
+            //     }
+            //     teacherDel.onerror = ()=>{
+            //         console.error('Class delete Error')
+            //     }
+            // }
 
             btnDiv.appendChild(editBtn)
             btnDiv.appendChild(infoBtn)
-            btnDiv.appendChild(deleteBtn)
+            // btnDiv.appendChild(deleteBtn)
             li.appendChild(btnDiv);
 
             classList.appendChild(li);
@@ -153,3 +155,66 @@ document.getElementById('editForm').addEventListener('submit', function(event){
         document.getElementById("editForm").reset();
     }
 })
+
+// =========================================================
+// NEW DELETE LOGIC
+// =========================================================
+
+// Button to open delete popup
+const deleteClassBtn = document.getElementById("deleteClassBtn");
+const overlay = document.getElementById("overlay");
+const deleteClassForm = document.getElementById("deleteClassForm");
+const closeDelete = document.getElementById("closeDelete");
+
+deleteClassBtn.addEventListener("click", () => {
+    overlay.style.display = "block";
+    deleteClassForm.style.display = "block";
+    loadDeleteClassList();
+});
+
+closeDelete.addEventListener("click", closeDeletePopup);
+overlay.addEventListener("click", closeDeletePopup);
+
+function closeDeletePopup() {
+    overlay.style.display = "none";
+    deleteClassForm.style.display = "none";
+}
+
+// Populate delete list
+function loadDeleteClassList() {
+    const tx = db.transaction('classes', 'readonly');
+    const store = tx.objectStore('classes');
+    const req = store.getAll();
+
+    req.onsuccess = () => {
+        const classes = req.result;
+        const ul = document.getElementById("deleteClassList");
+        ul.innerHTML = "";
+
+        classes.forEach(cls => {
+            const li = document.createElement("li");
+            li.textContent = cls.className;
+            li.onclick = () => confirmDeleteClass(cls.id, cls.className);
+            ul.appendChild(li);
+        });
+    };
+}
+
+// Confirm and delete
+function confirmDeleteClass(id, className) {
+    if (confirm(`Are you sure you want to delete class: ${className}?`)) {
+        const tx = db.transaction('classes', 'readwrite');
+        const store = tx.objectStore('classes');
+        const req = store.delete(id);
+
+        req.onsuccess = () => {
+            alert(`Class "${className}" deleted successfully`);
+            closeDeletePopup();
+            displayClass(); // refresh the list
+        };
+
+        req.onerror = () => {
+            alert("Error deleting class");
+        };
+    }
+}

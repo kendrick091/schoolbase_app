@@ -88,7 +88,7 @@ function displayData(){
             //AddBtn
             const cellAction = document.createElement('td');
             const editBtn = document.createElement('button');
-            editBtn.textContent = "Edit";
+            editBtn.textContent = "Update";
 
             editBtn.onclick = function(){
                 const updateSubject = {
@@ -112,7 +112,7 @@ function displayData(){
 
             //DeleteBtn
             const cellDelete = document.createElement('button');
-            cellDelete.textContent = 'Del';
+            cellDelete.textContent = 'delete';
             cellDelete.style.background = 'red';
             cellDelete.style.border = 'none'
             cellDelete.onclick = function(){

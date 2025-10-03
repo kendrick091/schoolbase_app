@@ -46,31 +46,49 @@
             </button>
             
                 <div class="teachersDivs">
-                    <div class="addDiv">
-                        <button class="animated-btn" id="addClass">ADD CLASS</button>
-                        <div class="addForm" id="toggleFormAddForm">
-                            <button class="dismise" id="dismise"><h3>close</h3></button>
-                            <h2>INPUT CLASS</h2>
-                        <form id="formInput">
-                            <input type="text" id="classInput" placeholder="ADD CLASS"><br>
-                            <button type="submit">SAVE</button>
-                        </form>
-                        </div>
-                        <ul id="listClass" class="listClass">
-                            <!---- from classes.js code--- -->
-                        </ul>
-                        <div id="editDiv" class="addForm">
-                            <button class="dismise" id="dismiseEdit"><h3>close</h3></button>
-                            <h2>Edit Class</h2>
-                            <form class="editForm" id="editForm">
-                                <input type="hidden" id="classId">
-                                <label for="classEdit">Class: </label>
-                                <input type="text" id="classEdit">
-                                <input type="submit" id="" value="SAVE">
-                            </form>
-                        </div>
-                    </div>
-                </div>
+    <div class="addDiv">
+        <button class="animated-btn" id="addClass">ADD CLASS</button>
+        <div class="addForm" id="toggleFormAddForm">
+            <button class="dismise" id="dismise"><h3>close</h3></button>
+            <h2>INPUT CLASS</h2>
+            <form id="formInput">
+                <input type="text" id="classInput" placeholder="ADD CLASS"><br>
+                <button type="submit">SAVE</button>
+            </form>
+        </div>
+
+        <!-- Delete Classes Button -->
+        <button class="animated-btn" id="deleteClassBtn" style="background:red; margin-top:10px;">DELETE CLASS</button>
+
+        <ul id="listClass" class="listClass">
+            <!---- from classes.js code--- -->
+        </ul>
+
+        <div id="editDiv" class="addForm">
+            <button class="dismise" id="dismiseEdit"><h3>close</h3></button>
+            <h2>Edit Class</h2>
+            <form class="editForm" id="editForm">
+                <input type="hidden" id="classId">
+                <label for="classEdit">Class: </label>
+                <input type="text" id="classEdit">
+                <input type="submit" value="SAVE">
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Overlay -->
+<div id="overlay" style="display:none;"></div>
+
+<!-- Delete Class Popup -->
+<div class="deleteForm" id="deleteClassForm" style="display:none;">
+    <div class="deleteContent">
+        <button class="dismise" id="closeDelete"><h3>×</h3></button>
+        <h2>Select Class to Delete</h2>
+        <ul id="deleteClassList"></ul>
+    </div>
+</div>
+
             </div>
         </div>
     </div>

@@ -75,6 +75,42 @@
                         </form>
                         </div>
                     </div>
+                    <!-- EDIT STUDENT POPUP -->
+<!-- Overlay Background -->
+<div id="overlay" style="display:none;"></div>
+
+<!-- EDIT STUDENT POPUP -->
+<div class="editForm" id="editStudentForm" style="display:none;">
+    <div class="editContent">
+        <button class="dismise" id="closeEdit"><h3>×</h3></button>
+        <h2>EDIT STUDENT</h2>
+        <form id="formEditStudent">
+            <input type="hidden" id="editStudentId">
+
+            <input type="text" id="editFirstName" placeholder="FIRST NAME">
+            <input type="text" id="editSurName" placeholder="SUR NAME">
+            <input type="text" id="editOtherName" placeholder="OTHER NAME">
+            <input type="text" id="editPhoneNumber" placeholder="PARENT PHONE No.">
+
+            <div class="selectDiv">
+                <legend>GENDER:</legend>
+                <select id="editGender">
+                    <option value="Male">MALE</option>
+                    <option value="Female">FEMALE</option>
+                </select><br>
+
+                <legend>SELECT CLASS:</legend>
+                <select id="editClass">
+                    <!-- Will be loaded from DB -->
+                </select>
+            </div>
+
+            <input type="submit" value="UPDATE">
+        </form>
+    </div>
+</div>
+
+
                      <table id="student-table">
                             <thead>
                                 <tr>
@@ -82,7 +118,7 @@
                                     <th>FIRST NAME</th>
                                     <th>SUR NAME</th>
                                     <th>OTHER NAME</th>
-                                    <th>PHONE No.</th>
+                                    <!-- <th>PHONE No.</th> -->
                                     <th>ACTION</th>
                                 </tr>
                             </thead>
