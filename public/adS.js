@@ -20,7 +20,7 @@
 
     // Refresh all ads every 60 seconds
     setInterval(() => {
-      refreshAd("top-ad", "1111111111");
-      refreshAd("footer-ad", "2222222222");
+      refreshAd("kendrick Ads", "4926512368");
+      refreshAd("footer Ads", "2550806675");
       refreshAd("content-ad", "3333333333", "fluid", "in-article");
     }, 60000);
