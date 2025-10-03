@@ -22,5 +22,5 @@
     setInterval(() => {
       refreshAd("kendrick Ads", "4926512368");
       refreshAd("footer Ads", "2550806675");
-      refreshAd("content-ad", "3333333333", "fluid", "in-article");
+      refreshAd("Center-Ads", "8170088575", "fluid", "in-article");
     }, 60000);
