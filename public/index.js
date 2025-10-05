@@ -51,9 +51,9 @@ function countStudentsByGender() {
 }
 
 function showSession(){
-  let transaction = db.transaction('students', 'readonly');
-  let studentStore = transaction.objectStore('students');
-  let showFirst = studentStore.get(1);
+  let transaction = db.transaction('sessionViewer', 'readonly');
+  let sessionViewerStore = transaction.objectStore('sessionViewer');
+  let showFirst = sessionViewerStore.get(1);
 
   showFirst.onsuccess = (event)=>{
     let dataID = event.target.result;

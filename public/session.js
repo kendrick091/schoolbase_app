@@ -162,6 +162,39 @@ function displayData() {
 
                 tx.oncomplete = function () {
                     alert(`Activated session ${session.session} (ID: ${sessionID}) assigned to all students.`);
+                    // ✅ STEP 2: Update sessionViewer store to hold this active session
+        const viewerTx = db.transaction("sessionViewer", "readwrite");
+        const viewerStore = viewerTx.objectStore("sessionViewer");
+
+        // We assume sessionViewer contains only one record (or the active one)
+        const getAllReq = viewerStore.getAll();
+
+        getAllReq.onsuccess = function () {
+            const viewers = getAllReq.result;
+
+            if (viewers.length > 0) {
+                // update first record
+                const viewer = viewers[0];
+                viewer.sessionID = sessionID;
+
+                const updateReq = viewerStore.put(viewer);
+                updateReq.onsuccess = function () {
+                    console.log(`sessionViewer updated with sessionID ${sessionID}`);
+                };
+                updateReq.onerror = function () {
+                    console.error("Failed to update sessionViewer");
+                };
+            } else {
+                // create a new record if none exists
+                const addReq = viewerStore.add({ id: 1, sessionID });
+                addReq.onsuccess = function () {
+                    console.log(`sessionViewer initialized with sessionID ${sessionID}`);
+                };
+                addReq.onerror = function () {
+                    console.error("Failed to initialize sessionViewer");
+                };
+            }
+        };
                 };
             };
             cellAction.appendChild(useSession);

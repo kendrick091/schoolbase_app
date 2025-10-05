@@ -1,5 +1,5 @@
 export const DB_NAME = "SchoolBase";
-export const DB_VERSION = 2;
+export const DB_VERSION = 3;
 
 let db;
 
@@ -37,6 +37,11 @@ function openDataBase(){
         if(!db.objectStoreNames.contains('teachers')){
             const teacherStore = db.createObjectStore('teachers', {keyPath: 'id', autoIncrement: true});
             teacherStore.createIndex('classID', 'classID', {unique: false})
+        }
+
+        //Session Viewer store
+        if(!db.objectStoreNames.contains('sessionViewer')){
+          const sessionViewer = db.createObjectStore('sessionViewer', {keyPath: 'id', autoIncrement: false})
         }
 
         //Class store
