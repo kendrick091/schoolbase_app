@@ -38,9 +38,9 @@ function displayInfo(){
             if(userId == classID){
                 count++
                 const row = document.createElement('tr');
-                // const cellId = document.createElement('td');
-                // cellId.textContent = id;
-                // row.appendChild(cellId);
+                const cellId = document.createElement('td');
+                cellId.textContent = id;
+                row.appendChild(cellId);
 
                 const cellFirstName = document.createElement('td');
                 cellFirstName.textContent = firstName;
