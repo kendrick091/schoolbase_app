@@ -15,8 +15,11 @@
 
 .checkboxContainer{
     width: 200px;
+    font-size: 17px;
 }
 
 .checkboxContainer input[type="checkbox"]{
     width: 15%;
+    padding: 10px 0;
+    margin: 7px 0;
 }
