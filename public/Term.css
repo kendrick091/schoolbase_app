@@ -15,11 +15,18 @@
 
 .checkboxContainer{
     width: 200px;
-    font-size: 17px;
+    font-size: 18px;
 }
 
 .checkboxContainer input[type="checkbox"]{
-    width: 15%;
+    width: 10%;
     padding: 10px 0;
-    margin: 7px 0;
+    margin: 10px 0;
+}
+
+.dismise{
+    color: white;
+    background: red;
+    padding: 7px;
+
 }
