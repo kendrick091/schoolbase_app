@@ -260,7 +260,7 @@ async function displayTable() {
 
       // EDIT (save directly, no recharge)
       const editBtn = document.createElement("button");
-      editBtn.textContent = "Edit";
+      editBtn.textContent = "Save";
       editBtn.addEventListener("click", async () => {
         if (!sessionID) {
           alert("No session registered! Please activate a session.");
