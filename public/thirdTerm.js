@@ -293,27 +293,30 @@ async function displayTable() {
       action.appendChild(editBtn);
 
       // DELETE (no gem deduction)
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "Delete";
-      deleteBtn.style.background = "red";
-      deleteBtn.style.border = "none";
+const deleteBtn = document.createElement("button");
+deleteBtn.textContent = "Delete";
+deleteBtn.style.background = "red";
+deleteBtn.style.border = "none";
 
-      deleteBtn.addEventListener("click", async () => {
-        const dTx = db.transaction("thirdTerm", "readwrite");
-        const ft = dTx.objectStore("thirdTerm");
-        const delReq = ft.delete(toInt(record.id));
+deleteBtn.addEventListener("click", async () => {
+  const confirmDelete = confirm("Are you sure you want to delete this subject?");
+  if (!confirmDelete) return; // stop if user clicks Cancel
 
-        delReq.onsuccess = async () => {
-          alert("Subject Deleted!");
-          await displayTable();
-        };
+  const dTx = db.transaction("thirdTerm", "readwrite");
+  const ft = dTx.objectStore("thirdTerm");
+  const delReq = ft.delete(toInt(record.id));
 
-        delReq.onerror = () => {
-          console.error("Subject delete error");
-        };
-      });
-      action.appendChild(deleteBtn);
+  delReq.onsuccess = async () => {
+    alert("Subject Deleted!");
+    await displayTable();
+  };
 
+  delReq.onerror = () => {
+    console.error("Subject delete error");
+  };
+});
+
+action.appendChild(deleteBtn);
       row.appendChild(action);
       tbody.appendChild(row);
     }
