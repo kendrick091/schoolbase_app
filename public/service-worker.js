@@ -1,4 +1,4 @@
-const CACHE_NAME = "schoolbase-cache-v7.3.1";
+const CACHE_NAME = "schoolbase-cache-v7.3.2";
 const urlsToCache = [
   "/",
   "/index.html",
