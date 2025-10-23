@@ -18,7 +18,10 @@ request.onsuccess = (event) => {
   db = event.target.result;
   loadStudentInfo();
   loadResult();
-  loadAttendance();
+  // loadAttendance();
+  // loadPsychomotor();
+  // loadAttendanceToStudentTh2()
+  loadTermInfo()
 };
 
 //School logo
@@ -85,14 +88,6 @@ function loadStudentInfo() {
   studentStore.get(studentId).onsuccess = (e) => {
     const student = e.target.result;
 
-      let tableRowFirstName = document.createElement('tr');
-      let title = document.createElement('td')
-      let firstNameTable = document.createElement('td')
-      title.textContent = `First Name:`;
-      firstNameTable.textContent = `${student.firstName}`;
-      tableRowFirstName.appendChild(title)
-      tableRowFirstName.appendChild(firstNameTable);
-
       let tableRowSurName = document.createElement('tr');
       let titleSurName = document.createElement('td')
       let surNameTable = document.createElement('td')
@@ -100,6 +95,14 @@ function loadStudentInfo() {
       surNameTable.textContent = `${student.surName}`;
       tableRowSurName.appendChild(titleSurName)
       tableRowSurName.appendChild(surNameTable)
+
+      let tableRowFirstName = document.createElement('tr');
+      let title = document.createElement('td')
+      let firstNameTable = document.createElement('td')
+      title.textContent = `First Name:`;
+      firstNameTable.textContent = `${student.firstName}`;
+      tableRowFirstName.appendChild(title)
+      tableRowFirstName.appendChild(firstNameTable);
       
        let tableRowOtherName = document.createElement('tr');
       let titleOtherName = document.createElement('td')
@@ -109,8 +112,8 @@ function loadStudentInfo() {
       tableRowOtherName.appendChild(titleOtherName);
       tableRowOtherName.appendChild(otherNameTable)
 
-      studentTh.appendChild(tableRowFirstName);
       studentTh.appendChild(tableRowSurName)
+      studentTh.appendChild(tableRowFirstName);
       studentTh.appendChild(tableRowOtherName)
   };
 
@@ -176,44 +179,38 @@ request.onsuccess = (event) => {
       tableRowTerm.appendChild(termTable)
 
       studentTh2.appendChild(tableRowTerm)
+      loadAttendanceToStudentTh2();
 }
 
-function loadAttendance() {
+function loadAttendanceToStudentTh2() {
   const tx = db.transaction("attendance", "readonly");
   const store = tx.objectStore("attendance");
-  const index = store.openCursor();
+  const cursorRequest = store.openCursor();
 
-  index.onsuccess = (event) => {
+  cursorRequest.onsuccess = (event) => {
     const cursor = event.target.result;
     if (cursor) {
       const record = cursor.value;
+      console.log("Checking attendance record:", record);
+
       if (
         record.studentID === studentId &&
         record.sessionID === sessionId &&
-        record.term === term
+        Number(record.term) === Number(term)
       ) {
-        document.getElementById("attendanceDiv").innerHTML = `
-          <table style="width: 100%; font-size: 12px;
-          text-align: left">
-          <h3 style="text-align: left">Attendance</h3>
-          <tr>
-          <th>Total Days</th>
-          <th>Present</th>
-          <th>Absent</th>
-          </tr>
-          <tr>
-          <td>${record.totalDays}</td>
-          <td>${record.presentDays}</td>
-          <td>${record.absentDays}</td>
-          </tr>
-          </table>
-        `;
-        return;
+        console.log("✅ Match found:", record);
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>Attendance:</td><td>${record.presentDays} / ${record.totalDays}</td>`;
+        document.getElementById("studentTh2").appendChild(row);
       }
       cursor.continue();
+    } else {
+      console.log("No more records in attendance store.");
     }
   };
 }
+
+
 
 
 function loadResult() {
@@ -304,6 +301,56 @@ function loadResult() {
   };
 }
 
+//display vacation and resumption dates
+function loadTermInfo() {
+  const tx = db.transaction("session", "readonly");
+  const store = tx.objectStore("session");
+  const req = store.get(sessionId);
+
+  req.onsuccess = (event) => {
+    const record = event.target.result;
+
+    const vac = document.getElementById("vacationDateDisplay");
+    const res = document.getElementById("resumptionDateDisplay");
+    const title = document.getElementById("termTitle");
+
+    if (!record) {
+      title.textContent = "No session record found.";
+      vac.textContent = "-";
+      res.textContent = "-";
+      return;
+    }
+
+    // Choose correct term info
+    let vacDate = "-";
+    let resDate = "-";
+    let termName = "";
+
+    if (term === 1) {
+      vacDate = record.firstVac || "-";
+      resDate = record.firstRes || "-";
+      termName = "First Term";
+    } else if (term === 2) {
+      vacDate = record.secondVac || "-";
+      resDate = record.secondRes || "-";
+      termName = "Second Term";
+    } else if (term === 3) {
+      vacDate = record.thirdVac || "-";
+      resDate = record.thirdRes || "-";
+      termName = "Third Term";
+    }
+
+    // title.textContent = `${termName} `;
+    vac.textContent = `School Vacates on: ${vacDate}`;
+    res.textContent = `Next Term Resumes on: ${resDate}`;
+  };
+
+  req.onerror = () => {
+    console.error("Error loading session record.");
+  };
+}
+
+
 document.getElementById('printBtn').addEventListener('click', ()=>{
   window.print();
 })
@@ -327,3 +374,114 @@ function getRemark(score) {
   if(score >= 40) return "Pass";
   return "Fail";
 }
+
+// //code to load psychomotor data
+// function loadPsychomotor() {
+//   const tx = db.transaction("psychomotorStore", "readonly");
+//   const store = tx.objectStore("psychomotorStore");
+
+//   const recordKey = `${studentId}_${sessionId}_${term}`;
+//   const request = store.get(recordKey);
+
+//   request.onsuccess = (event) => {
+//     const data = event.target.result;
+//     if (!data) {
+//       console.log("No psychomotor record found for this student/term.");
+//       document.getElementById("psychomotorDiv").innerHTML = `
+//         <h3>Psychomotor & Behaviour</h3>
+//         <p>No psychomotor record available for this term.</p>
+//       `;
+//       return;
+//     }
+
+//     const a = data.assessment[0];
+//     const b = data.behaviour[0];
+
+//     const psychomotorHTML = `
+//       <h4>Psychomotor & Behaviour Assessment</h4>
+//       <div class="print-page-break">
+//       <table>
+//         <thead>
+//           <tr>
+//             <th colspan="2">Psychomotor Skills</th>
+//           </tr>
+//         </thead>
+//         <tbody>
+//           <tr>
+//           <td>Handwriting</td><td>${a.handwriting ?? "-"}</td>
+//           <td>Fluency</td><td>${a.fluency ?? "-"}</td>
+//           <td>Sports</td><td>${a.sports ?? "-"}</td>
+//           <td>Handling of Tools</td><td>${a.handlingOfTools ?? "-"}</td>
+//           </tr>
+//           <tr>
+//           <td>Drawing & Painting</td><td>${a.drawing ?? "-"}</td>
+//           <td>Crafts</td><td>${a.crafts ?? "-"}</td>
+//           </tr>
+//           </tbody>
+//           </table>
+
+//           <table>
+//           <thead>
+//           <tr>
+//             <th colspan="2" padding:4px;">Behavioural Traits</th>
+//           </tr>
+//           </thead>
+//           <tbody>
+//           <tr>
+//           <td>Punctuality</td><td>${b.punctuality ?? "-"}</td>
+//           <td>Attendance at Class</td><td>${b.attendanceAtClass ?? "-"}</td>
+//           <td>Reliability</td><td>${b.reliability ?? "-"}</td>
+//           <td>Honesty</td><td>${b.honesty ?? "-"}</td>
+//           </tr>
+//           <tr>
+//           <td>Relationship with Staff</td><td>${b.relationshipWithStaff ?? "-"}</td>
+//           <td>Relationship with Other Students</td><td>${b.relationshipWithOtherStudents ?? "-"}</td>
+//           <td>Spirit of Cooperation</td><td>${b.spiritOfCooperation ?? "-"}</td>
+//           <td>Sense of Responsibility</td><td>${b.senseOfResponsibility ?? "-"}</td>
+//           </tr>
+//           <tr>
+//           <td>Attentiveness</td><td>${b.attentiveness ?? "-"}</td>
+//           <td>Organizational Ability</td><td>${b.organizationalAbility ?? "-"}</td>
+//           <td>Perseverance</td><td>${b.perseverance ?? "-"}</td>
+//           <td>Physical Development</td><td>${b.physicalDev ?? "-"}</td>
+//           </tr>
+//           <tr>
+//           <td>Self Control</td><td>${b.selfControl ?? "-"}</td>
+//           </tr>
+//           </tbod>
+//           </table>
+//       </div>
+//     `;
+
+//     document.getElementById("psychomotorDiv").innerHTML = psychomotorHTML;
+//   };
+
+//   request.onerror = () => {
+//     console.error("Error loading psychomotor data.");
+//   };
+// }
+
+// // =============================
+// // Load the term info from DB
+// // =============================
+// function loadTermInfo() {
+//   const tx = db.transaction("termResumption", "readonly");
+//   const store = tx.objectStore("termResumption");
+//   const index = store.index("sessionID");
+//   const req = index.get(term);
+
+//   req.onsuccess = (event) => {
+//     const record = event.target.result;
+//     const title = document.getElementById("termTitle");
+//     const vac = document.getElementById("vacationDateDisplay");
+//     const res = document.getElementById("resumptionDateDisplay");
+
+//     if (!record) {
+//       title.textContent = "No data found for this session.";
+//       vac.textContent = "-";
+//       res.textContent = "-";
+//       return;
+//     }
+
+//  
+

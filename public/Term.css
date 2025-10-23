@@ -28,5 +28,23 @@
     color: white;
     background: red;
     padding: 7px;
-
 }
+
+.psychomotorForm{
+    border: 1px solid rgba(89, 154, 180, 0.89);
+    margin: 10px 0;
+    width: 100%;
+}
+
+.psychomotorForm .psyCon{
+    padding: 10px;
+    width: 100%;
+    background: rgba(184, 184, 212, 0.185);
+    margin: 5px 0;
+}
+
+.psychomotorForm .psyCon:hover{
+    background: rgba(136, 136, 163, 0.24);
+}
+
+

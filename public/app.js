@@ -1,5 +1,5 @@
 export const DB_NAME = "SchoolBase";
-export const DB_VERSION = 3;
+export const DB_VERSION = 4;
 
 let db;
 
@@ -12,7 +12,7 @@ function openDataBase(){
 
         //School Name
         if(!db.objectStoreNames.contains('school')){
-            const schoolNameStore = db.createObjectStore('school',{keyPath: 'id', autoIncrement: false});
+            const schoolNameStore = db.createObjectStore('school',{keyPath: 'id'});
         }
 
         //Session Store
@@ -34,10 +34,10 @@ function openDataBase(){
         }
 
         //Teacher store
-        if(!db.objectStoreNames.contains('teachers')){
-            const teacherStore = db.createObjectStore('teachers', {keyPath: 'id', autoIncrement: true});
-            teacherStore.createIndex('classID', 'classID', {unique: false})
-        }
+        // if(!db.objectStoreNames.contains('teachers')){
+        //     const teacherStore = db.createObjectStore('teachers', {keyPath: 'id', autoIncrement: true});
+        //     teacherStore.createIndex('classID', 'classID', {unique: false})
+        // }
 
         //Session Viewer store
         if(!db.objectStoreNames.contains('sessionViewer')){
@@ -56,10 +56,16 @@ function openDataBase(){
             store.createIndex("student_session_term", ["studentID", "sessionID", "term"], { unique: true });
           }
         
-        //Subject store
+        // //Subject store
         if(!db.objectStoreNames.contains('subjectStore')){
             const subjectStore = db.createObjectStore('subjectStore', {keyPath: 'id', autoIncrement: true});
         }
+
+        // //Psychomotor store
+        // if(!db.objectStoreNames.contains('psychomotorStore')){
+        //     const psychomotorStore = db.createObjectStore('psychomotorStore', {keyPath: 'id', autoIncrement: true});
+        //     store.createIndex("psychomotor_session_term", ["sessionID", "studentID", 'term'], {unique: false})
+        // }
 
         //FirstTerm store
         if(!db.objectStoreNames.contains('firstTerm')){
@@ -90,10 +96,12 @@ function openDataBase(){
         console.error("Database errorL", event.target.error);
     };
 
-    request.onsuccess = function(event){
-        db = event.target.result;
-        console.log("Database opened successfully")
-    }
+    request.onsuccess = function(event) {
+  db = event.target.result;
+  console.log("Database opened successfully");
+  console.log("Object stores:", Array.from(db.objectStoreNames));
+};
+
 }
 
 

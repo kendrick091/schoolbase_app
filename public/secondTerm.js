@@ -30,6 +30,8 @@ request.onsuccess = async (event) => {
   displayCheckbox();
   studentNameDisplay();
   await displayTable();
+  // addPsychomotor()
+  // autoLoadPsychomotor();
 };
 
 // ======== Helpers ========
@@ -165,6 +167,10 @@ function studentNameDisplay() {
       const result = cursor.value;
       if (result.id === userId) {
         const student = document.getElementById("studentName");
+        // const studentIdPsychomotor = document.getElementById("studentIdPsychomotor");
+        // studentIdPsychomotor.value = `${result.id}`;
+        // const psychomotorSession = document.getElementById('psychomotorSession')
+        // psychomotorSession.value = `${result.sessionID}`
         student.textContent = `${result.firstName} ${result.surName}`;
       }
       cursor.continue();
@@ -325,3 +331,179 @@ action.appendChild(deleteBtn);
     cursor.continue();
   };
 }
+
+// Function to add or update psychomotor data
+// function addPsychomotor() {
+//   document.getElementById('savePsychomotor').addEventListener('click', () => {
+//     const studentID = document.getElementById('studentIdPsychomotor').value.trim();
+//     const psychomotorSession = document.getElementById('psychomotorSession').value.trim();
+//     const psychomotorTerm = document.getElementById('psychomotorTerm').value.trim(); // e.g. "First", "Second", etc.
+
+//     // ✅ Validate input
+//     if (!studentID || !psychomotorSession || !psychomotorTerm) {
+//       alert('Please enter Student ID, Session, and Term.');
+//       return;
+//     }
+
+//     // ✅ Combine student, session, and term into a unique key
+//     const recordKey = `${studentID}_${psychomotorSession}_${psychomotorTerm}`;
+
+//     // Psychomotor fields
+//     const handwriting = parseInt(document.getElementById('handwriting').value) || 0;
+//     const fluency = parseInt(document.getElementById('fluency').value) || 0;
+//     const sports = parseInt(document.getElementById('sports').value) || 0;
+//     const handlingOfTools = parseInt(document.getElementById('handlingOfTools').value) || 0;
+//     const drawing = parseInt(document.getElementById('drawing').value) || 0;
+//     const crafts = parseInt(document.getElementById('crafts').value) || 0;
+
+//     // Behaviour fields
+//     const punctuality = parseInt(document.getElementById('punctuality').value) || 0;
+//     const attendanceAtClass = parseInt(document.getElementById('attendanceAtClass').value) || 0;
+//     const reliability = parseInt(document.getElementById('reliability').value) || 0;
+//     const honesty = parseInt(document.getElementById('honesty').value) || 0;
+//     const relationshipWithStaff = parseInt(document.getElementById('relationshipWithStaff').value) || 0;
+//     const relationshipWithOtherStudents = parseInt(document.getElementById('relationshipWithOtherStudents').value) || 0;
+//     const spiritOfCooperation = parseInt(document.getElementById('spiritOfCooperation').value) || 0;
+//     const senseOfResponsibility = parseInt(document.getElementById('senseOfResponsibility').value) || 0;
+//     const attentiveness = parseInt(document.getElementById('attentiveness').value) || 0;
+//     const organizationalAbility = parseInt(document.getElementById('organizationalAbility').value) || 0;
+//     const perseverance = parseInt(document.getElementById('perseverance').value) || 0;
+//     const physicalDev = parseInt(document.getElementById('physicalDev').value) || 0;
+//     const selfControl = parseInt(document.getElementById('selfControl').value) || 0;
+
+//     // Start IndexedDB transaction
+//     const tx = db.transaction('psychomotorStore', 'readwrite');
+//     const store = tx.objectStore('psychomotorStore');
+
+//     // Check if record already exists
+//     const checkReq = store.get(recordKey);
+
+//     checkReq.onsuccess = () => {
+//       const existingData = checkReq.result;
+
+//       if (existingData) {
+//         const confirmEdit = confirm(
+//           `Psychomotor record already exists for Student ${studentID} (${psychomotorSession}, ${psychomotorTerm} Term).\nDo you want to update it?`
+//         );
+//         if (!confirmEdit) return;
+//       }
+
+//       // Prepare psychomotor data
+//       const psychomotorData = {
+//         id: recordKey, // Primary key
+//         studentID,
+//         session: psychomotorSession,
+//         term: psychomotorTerm, // e.g., First Term
+//         assessment: [{
+//           handwriting,
+//           fluency,
+//           sports,
+//           handlingOfTools,
+//           drawing,
+//           crafts,
+//         }],
+//         behaviour: [{
+//           punctuality,
+//           attendanceAtClass,
+//           reliability,
+//           honesty,
+//           relationshipWithStaff,
+//           relationshipWithOtherStudents,
+//           spiritOfCooperation,
+//           senseOfResponsibility,
+//           attentiveness,
+//           organizationalAbility,
+//           perseverance,
+//           physicalDev,
+//           selfControl,
+//         }],
+//       };
+
+//       // Save or update record
+//       const addReq = store.put(psychomotorData);
+
+//       addReq.onsuccess = () => {
+//         console.log(`Psychomotor record for ${studentID} (${psychomotorSession}, ${psychomotorTerm}) saved successfully.`);
+//         alert('Psychomotor information saved successfully!');
+//       };
+
+//       addReq.onerror = () => {
+//         console.error(`Error saving psychomotor record for ${studentID} (${psychomotorSession}, ${psychomotorTerm}).`);
+//         alert('Error saving psychomotor information.');
+//       };
+//     };
+
+//     checkReq.onerror = () => {
+//       console.error('Error checking if student record exists.');
+//     };
+//   });
+// }
+
+// // Function to automatically load psychomotor data when form is opened or student info is set
+// function autoLoadPsychomotor() {
+//   // Observe when student ID and session fields change or become available
+//   const observer = new MutationObserver(() => {
+//     const studentID = document.getElementById('studentIdPsychomotor').value.trim();
+//     const session = document.getElementById('psychomotorSession').value.trim();
+//     const term = document.getElementById('psychomotorTerm').value.trim();
+
+//     if (!studentID || !session || !term) return;
+
+//     // Combined key
+//     const recordKey = `${studentID}_${session}_${term}`;
+
+//     const tx = db.transaction('psychomotorStore', 'readonly');
+//     const store = tx.objectStore('psychomotorStore');
+//     const request = store.get(recordKey);
+
+//     request.onsuccess = () => {
+//       const record = request.result;
+//       if (!record) {
+//         console.log(`No psychomotor record found for ${recordKey}.`);
+//         return;
+//       }
+
+//       console.log(`Auto-loaded psychomotor record for ${recordKey}:`, record);
+
+//       // Fill in assessment values
+//       const a = record.assessment[0];
+//       document.getElementById('handwriting').value = a.handwriting || '';
+//       document.getElementById('fluency').value = a.fluency || '';
+//       document.getElementById('sports').value = a.sports || '';
+//       document.getElementById('handlingOfTools').value = a.handlingOfTools || '';
+//       document.getElementById('drawing').value = a.drawing || '';
+//       document.getElementById('crafts').value = a.crafts || '';
+
+//       // Fill in behaviour values
+//       const b = record.behaviour[0];
+//       document.getElementById('punctuality').value = b.punctuality || '';
+//       document.getElementById('attendanceAtClass').value = b.attendanceAtClass || '';
+//       document.getElementById('reliability').value = b.reliability || '';
+//       document.getElementById('honesty').value = b.honesty || '';
+//       document.getElementById('relationshipWithStaff').value = b.relationshipWithStaff || '';
+//       document.getElementById('relationshipWithOtherStudents').value = b.relationshipWithOtherStudents || '';
+//       document.getElementById('spiritOfCooperation').value = b.spiritOfCooperation || '';
+//       document.getElementById('senseOfResponsibility').value = b.senseOfResponsibility || '';
+//       document.getElementById('attentiveness').value = b.attentiveness || '';
+//       document.getElementById('organizationalAbility').value = b.organizationalAbility || '';
+//       document.getElementById('perseverance').value = b.perseverance || '';
+//       document.getElementById('physicalDev').value = b.physicalDev || '';
+//       document.getElementById('selfControl').value = b.selfControl || '';
+
+//       console.log('Psychomotor data displayed automatically.');
+//     };
+
+//     request.onerror = () => {
+//       console.error('Error fetching psychomotor data automatically.');
+//     };
+//   });
+
+//   // Watch for changes to hidden input values (when you set them dynamically)
+//   observer.observe(document.getElementById('psychomotorForm'), {
+//     subtree: true,
+//     childList: true,
+//     attributes: true,
+//     attributeFilter: ['value'],
+//   });
+// }
+

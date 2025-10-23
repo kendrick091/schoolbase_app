@@ -58,8 +58,8 @@ function loadStudentInfo() {
 
     const table = document.getElementById("studentInfo");
     table.innerHTML = `
+    <tr><td class="topTableClass"><b>Sur Name:</b></td><td>${student.surName}</td></tr>
       <tr><td class="topTableClass"><b>First Name:</b></td><td>${student.firstName}</td></tr>
-      <tr><td class="topTableClass"><b>Sur Name:</b></td><td>${student.surName}</td></tr>
       <tr><td class="topTableClass"><b>Other Name:</b></td><td>${student.otherName}</td></tr>
     `;
   };

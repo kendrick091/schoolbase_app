@@ -1,12 +1,11 @@
 body{
-  background: #e4e6e6;
   display: flex;
   justify-content: center;
 }
 .container{
   padding: 20px;
   width: 80%;
-  background: white;
+  background: transparent;
 }
 
 .schoolInfo{
@@ -53,6 +52,24 @@ th {
   padding: 5px;
   width: 100%;
 }
+/* .print-page-break{
+  
+} */
+
+.print-page-break table{
+  width: 100%;
+  font-size: 12px;
+  text-align:left;
+  border-collapse: collapse;
+  margin: 0 3px;
+}
+.print-page-break th{
+  border: none;
+}
+.print-page-break td {
+  padding: 4px;
+  border: 1px solid #000;
+}
 
   @media print {
     body {
@@ -62,7 +79,7 @@ th {
 
     .container {
       padding: 3%;
-      margin-top: 5%;
+      margin-top: 2%;
       width: 100%;
     }
 
