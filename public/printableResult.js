@@ -341,8 +341,8 @@ function loadTermInfo() {
     }
 
     // title.textContent = `${termName} `;
-    vac.textContent = `School Vacates on: ${vacDate}`;
-    res.textContent = `Next Term Resumes on: ${resDate}`;
+    vac.textContent = `Vacation Date: ${vacDate}`;
+    res.textContent = `Next Term Begins: ${resDate}`;
   };
 
   req.onerror = () => {
