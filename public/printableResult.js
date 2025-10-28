@@ -19,7 +19,7 @@ request.onsuccess = (event) => {
   loadStudentInfo();
   loadResult();
   // loadAttendance();
-  // loadPsychomotor();
+  loadPsychomotor();
   // loadAttendanceToStudentTh2()
   loadTermInfo()
 };
@@ -77,112 +77,107 @@ function renderSchoolHeaderAndFooter() {
 }
 
 
+// ===============================
+// LOAD STUDENT INFO
+// ===============================
 function loadStudentInfo() {
   const transaction = db.transaction(['students', 'classes', 'session', 'session_students'], 'readonly');
 
   let studentTh = document.getElementById('studentTh');
   let studentTh2 = document.getElementById('studentTh2');
-  
-  // Student
+
+  studentTh.innerHTML = "";
+  studentTh2.innerHTML = "";
+
+  // ===============================
+  // STUDENT NAME
+  // ===============================
   const studentStore = transaction.objectStore('students');
   studentStore.get(studentId).onsuccess = (e) => {
     const student = e.target.result;
+    if (!student) return;
 
-      let tableRowSurName = document.createElement('tr');
-      let titleSurName = document.createElement('td')
-      let surNameTable = document.createElement('td')
-      titleSurName.textContent = `Sur Name:`;
-      surNameTable.textContent = `${student.surName}`;
-      tableRowSurName.appendChild(titleSurName)
-      tableRowSurName.appendChild(surNameTable)
-
-      let tableRowFirstName = document.createElement('tr');
-      let title = document.createElement('td')
-      let firstNameTable = document.createElement('td')
-      title.textContent = `First Name:`;
-      firstNameTable.textContent = `${student.firstName}`;
-      tableRowFirstName.appendChild(title)
-      tableRowFirstName.appendChild(firstNameTable);
-      
-       let tableRowOtherName = document.createElement('tr');
-      let titleOtherName = document.createElement('td')
-      let otherNameTable = document.createElement('td')
-      titleOtherName.textContent = `Other Name:`;
-      otherNameTable.textContent = `${student.otherName}`;
-      tableRowOtherName.appendChild(titleOtherName);
-      tableRowOtherName.appendChild(otherNameTable)
-
-      studentTh.appendChild(tableRowSurName)
-      studentTh.appendChild(tableRowFirstName);
-      studentTh.appendChild(tableRowOtherName)
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>Student Name:</td><td>${student.surName} ${student.firstName} ${student.otherName}</td>`;
+    studentTh.appendChild(row);
   };
 
-  // Session
+  // ===============================
+  // SESSION
+  // ===============================
   const sessionStore = transaction.objectStore('session');
   sessionStore.get(sessionId).onsuccess = (s) => {
-    
-      let tableRowSession = document.createElement('tr');
-      let titleSession = document.createElement('td')
-      let sessionTable = document.createElement('td')
-      titleSession.textContent = `Session:`;
-      sessionTable.textContent = `${s.target.result.session}`;
-      tableRowSession.appendChild(titleSession)
-      tableRowSession.appendChild(sessionTable)
+    const session = s.target.result;
+    if (!session) return;
 
-      studentTh2.appendChild(tableRowSession)
+    const row = document.createElement('tr');
+    row.innerHTML = `<td>Academic Session:</td><td>${session.session}</td>`;
+    studentTh.appendChild(row);
   };
 
+  // ===============================
+  // CLASS + STUDENT COUNT
+  // ===============================
   const mapStore = transaction.objectStore('session_students');
-const request = mapStore.openCursor();
+  const request = mapStore.openCursor();
 
-request.onsuccess = (event) => {
-  const cursor = event.target.result;
-  if(cursor) {
-    const record = cursor.value;
-    if(record.studentID === studentId && record.sessionID === sessionId) {
-      const classStore = db.transaction('classes', 'readonly').objectStore('classes');
-      classStore.get(record.classID).onsuccess = (c) => {
-          let tableRowClass = document.createElement('tr');
-          let titleClass = document.createElement('td')
-          let classTable = document.createElement('td')
-          titleClass.textContent = `Class:`;
-          classTable.textContent = `${c.target.result.className}`;
-          tableRowClass.appendChild(titleClass)
-          tableRowClass.appendChild(classTable)
+  request.onsuccess = (event) => {
+    const cursor = event.target.result;
+    if (cursor) {
+      const record = cursor.value;
+      if (record.studentID === studentId && record.sessionID === sessionId) {
+        const classStore = db.transaction('classes', 'readonly').objectStore('classes');
+        classStore.get(record.classID).onsuccess = (c) => {
+          const classData = c.target.result;
 
-          studentTh2.appendChild(tableRowClass)
-      };
-      return; // stop after finding
+          // CLASS NAME IN studentTh
+          const classRow = document.createElement('tr');
+          classRow.innerHTML = `<td>Class:</td><td>${classData.className}</td>`;
+          studentTh.appendChild(classRow);
+
+          // COUNT STUDENTS IN SAME CLASS
+          const tx2 = db.transaction("session_students", "readonly");
+          const countStore = tx2.objectStore("session_students");
+          const countReq = countStore.getAll();
+
+          countReq.onsuccess = () => {
+            const all = countReq.result.filter(
+              r => r.classID === record.classID && r.sessionID === sessionId
+            );
+            const countRow = document.createElement('tr');
+            countRow.innerHTML = `<td>Students in Class:</td><td>${all.length}</td>`;
+            studentTh2.appendChild(countRow); // still show student count in Th2
+          };
+        };
+        return;
+      }
+      cursor.continue();
     }
-    cursor.continue();
-  } else {
-    document.getElementById("classInfo").textContent = "Class: Not Found for this session";
-  }
-};
+  };
 
-
-  // Term
+  // ===============================
+  // MOVE TERM TO studentTh2
+  // ===============================
   function termDefined(terms) {
-    if(terms == 1) return "1st"
-    if(terms == 2) return "2nd"
-    if(terms == 3) return "3rd"
-
-    console.log(terms)
+    if (terms == 1) return "1st";
+    if (terms == 2) return "2nd";
+    if (terms == 3) return "3rd";
+    return "";
   }
 
-  let tableRowTerm = document.createElement('tr');
-      let titleTerm = document.createElement('td')
-      let termTable = document.createElement('td')
-      titleTerm.textContent = `Term:`;
-      termTable.textContent = `${termDefined(term)} Term`;
-      tableRowTerm.appendChild(titleTerm)
-      tableRowTerm.appendChild(termTable)
+  const termRow = document.createElement('tr');
+  termRow.innerHTML = `<td>Term:</td><td>${termDefined(term)} Term</td>`;
+  studentTh2.appendChild(termRow);
 
-      studentTh2.appendChild(tableRowTerm)
-      loadAttendanceToStudentTh2();
+  // LOAD ATTENDANCE, VACATION, AND RESUMPTION
+  loadAttendanceToStudentTh();
+  loadTermDatesToStudentTh2();
 }
 
-function loadAttendanceToStudentTh2() {
+// ===============================
+// ATTENDANCE LOADER
+// ===============================
+function loadAttendanceToStudentTh() {
   const tx = db.transaction("attendance", "readonly");
   const store = tx.objectStore("attendance");
   const cursorRequest = store.openCursor();
@@ -191,27 +186,58 @@ function loadAttendanceToStudentTh2() {
     const cursor = event.target.result;
     if (cursor) {
       const record = cursor.value;
-      console.log("Checking attendance record:", record);
 
       if (
         record.studentID === studentId &&
         record.sessionID === sessionId &&
         Number(record.term) === Number(term)
       ) {
-        console.log("✅ Match found:", record);
         const row = document.createElement("tr");
         row.innerHTML = `<td>Attendance:</td><td>${record.presentDays} / ${record.totalDays}</td>`;
-        document.getElementById("studentTh2").appendChild(row);
+        document.getElementById("studentTh").appendChild(row);
       }
       cursor.continue();
-    } else {
-      console.log("No more records in attendance store.");
     }
   };
 }
 
+// ===============================
+// ADD VACATION & RESUMPTION TO studentTh2
+// ===============================
+function loadTermDatesToStudentTh2() {
+  const tx = db.transaction("session", "readonly");
+  const store = tx.objectStore("session");
+  const req = store.get(sessionId);
 
+  req.onsuccess = (event) => {
+    const record = event.target.result;
+    if (!record) return;
 
+    let vacDate = "-";
+    let resDate = "-";
+
+    if (term === 1) {
+      vacDate = record.firstVac || "-";
+      resDate = record.firstRes || "-";
+    } else if (term === 2) {
+      vacDate = record.secondVac || "-";
+      resDate = record.secondRes || "-";
+    } else if (term === 3) {
+      vacDate = record.thirdVac || "-";
+      resDate = record.thirdRes || "-";
+    }
+
+    const vacRow = document.createElement("tr");
+    vacRow.innerHTML = `<td>Vacation Date:</td><td>${vacDate}</td>`;
+
+    const resRow = document.createElement("tr");
+    resRow.innerHTML = `<td>Next Term Begins:</td><td>${resDate}</td>`;
+
+    const studentTh2 = document.getElementById("studentTh2");
+    studentTh2.appendChild(vacRow);
+    studentTh2.appendChild(resRow);
+  };
+}
 
 function loadResult() {
   let storeName;
@@ -302,55 +328,55 @@ function loadResult() {
 }
 
 //display vacation and resumption dates
-function loadTermInfo() {
-  const tx = db.transaction("session", "readonly");
-  const store = tx.objectStore("session");
-  const req = store.get(sessionId);
+// function loadTermInfo() {
+//   const tx = db.transaction("session", "readonly");
+//   const store = tx.objectStore("session");
+//   const req = store.get(sessionId);
 
-  req.onsuccess = (event) => {
-    const record = event.target.result;
+//   req.onsuccess = (event) => {
+//     const record = event.target.result;
 
-    const vac = document.getElementById("vacationDateDisplay");
-    const res = document.getElementById("resumptionDateDisplay");
-    const title = document.getElementById("termTitle");
+//     const vac = document.getElementById("vacationDateDisplay");
+//     const res = document.getElementById("resumptionDateDisplay");
+//     const title = document.getElementById("termTitle");
 
-    if (!record) {
-      title.textContent = "No session record found.";
-      vac.textContent = "-";
-      res.textContent = "-";
-      return;
-    }
+//     if (!record) {
+//       title.textContent = "No session record found.";
+//       vac.textContent = "-";
+//       res.textContent = "-";
+//       return;
+//     }
 
-    // Choose correct term info
-    let vacDate = "-";
-    let resDate = "-";
-    let termName = "";
+//     // Choose correct term info
+//     let vacDate = "-";
+//     let resDate = "-";
+//     let termName = "";
 
-    if (term === 1) {
-      vacDate = record.firstVac || "-";
-      resDate = record.firstRes || "-";
-      termName = "First Term";
-    } else if (term === 2) {
-      vacDate = record.secondVac || "-";
-      resDate = record.secondRes || "-";
-      termName = "Second Term";
-    } else if (term === 3) {
-      vacDate = record.thirdVac || "-";
-      resDate = record.thirdRes || "-";
-      termName = "Third Term";
-    }
+//     if (term === 1) {
+//       vacDate = record.firstVac || "-";
+//       resDate = record.firstRes || "-";
+//       termName = "First Term";
+//     } else if (term === 2) {
+//       vacDate = record.secondVac || "-";
+//       resDate = record.secondRes || "-";
+//       termName = "Second Term";
+//     } else if (term === 3) {
+//       vacDate = record.thirdVac || "-";
+//       resDate = record.thirdRes || "-";
+//       termName = "Third Term";
+//     }
 
-    // title.textContent = `${termName} `;
-    vac.textContent = `Vacation Date: ${vacDate}`;
-    res.textContent = `Next Term Begins: ${resDate}`;
-  };
+//     // title.textContent = `${termName} `;
+//     vac.textContent = `Vacation Date: ${vacDate}`;
+//     res.textContent = `Next Term Begins: ${resDate}`;
+//   };
 
-  req.onerror = () => {
-    console.error("Error loading session record.");
-  };
-}
+//   req.onerror = () => {
+//     console.error("Error loading session record.");
+//   };
+// }
 
-
+//Print btn ======= ---=
 document.getElementById('printBtn').addEventListener('click', ()=>{
   window.print();
 })
@@ -375,10 +401,10 @@ function getRemark(score) {
   return "Fail";
 }
 
-// //code to load psychomotor data
+//code to load psychomotor data
 // function loadPsychomotor() {
-//   const tx = db.transaction("psychomotorStore", "readonly");
-//   const store = tx.objectStore("psychomotorStore");
+//   const tx = db.transaction("psychomotor", "readonly");
+//   const store = tx.objectStore("psychomotor");
 
 //   const recordKey = `${studentId}_${sessionId}_${term}`;
 //   const request = store.get(recordKey);
@@ -460,28 +486,4 @@ function getRemark(score) {
 //     console.error("Error loading psychomotor data.");
 //   };
 // }
-
-// // =============================
-// // Load the term info from DB
-// // =============================
-// function loadTermInfo() {
-//   const tx = db.transaction("termResumption", "readonly");
-//   const store = tx.objectStore("termResumption");
-//   const index = store.index("sessionID");
-//   const req = index.get(term);
-
-//   req.onsuccess = (event) => {
-//     const record = event.target.result;
-//     const title = document.getElementById("termTitle");
-//     const vac = document.getElementById("vacationDateDisplay");
-//     const res = document.getElementById("resumptionDateDisplay");
-
-//     if (!record) {
-//       title.textContent = "No data found for this session.";
-//       vac.textContent = "-";
-//       res.textContent = "-";
-//       return;
-//     }
-
-//  
 
