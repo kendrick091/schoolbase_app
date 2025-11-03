@@ -279,12 +279,14 @@ function loadResult() {
             <td>${subject ? subject.subjects : "Unknown"}</td>
             <td>${ca1 ?? 0}</td>
             <td>${ca2 ?? 0}</td>
-            <td>${ca3 ?? 0}</td>
+            <!---- <td>${ca3 ?? 0}</td> ---->
             <td>${exam ?? 0}</td>
             <td>${subjectTotal}</td>
             <td>${getGrade(subjectTotal)}</td>
             <td>${getRemark(subjectTotal)}</td>
           `;
+          document.getElementById('headTeacherCommentSpan')
+          .textContent = `${headTeacherComment(subjectTotal)}`
           tableBody.appendChild(row);
         };
       }
@@ -399,6 +401,20 @@ function getRemark(score) {
   if(score >= 45) return "Fair";
   if(score >= 40) return "Pass";
   return "Fail";
+}
+
+function headTeacherComment(score) {
+  if(score >= 80) return `Outstanding effort!. Your hard work and dedication
+  have really paid off.`;
+  if(score >= 70) return `Exceptional performance!. You've demostrated a deep 
+  understanding of the subject matter.`;
+  if(score >= 60) return `Impressive work! Your resuits reflect a high level 
+  of mastering and commitment.`;
+  if(score >= 50) return `Average Performance Good Job! You've met expectation 
+  and with some effort, you can strive for more.`;
+  if(score >= 40) return `Solid performance. You're on the right track keep pushing 
+   yourself to reach your full potential`;
+  return `There's room for improvement. Let's set some goals and work towards achieving them.`;
 }
 
 //code to load psychomotor data
