@@ -168,9 +168,9 @@ const record = allScores.find(
 
       const ca1 = record ? record.ca1 : 0;
       const ca2 = record ? record.ca2 : 0;
-      const ca3 = record ? record.ca3 : 0;
+      // const ca3 = record ? record.ca3 : 0;
       const exam = record ? record.exam : 0;
-      const total = ca1 + ca2 + ca3 + exam;
+      const total = ca1 + ca2 + exam;
 
       const row = document.createElement("tr");
       row.dataset.studentId = student.id;
@@ -179,7 +179,6 @@ const record = allScores.find(
         <td>${student.surName} ${student.firstName}</td>
         <td contenteditable="true" class="ca1">${ca1}</td>
         <td contenteditable="true" class="ca2">${ca2}</td>
-        <td contenteditable="true" class="ca3">${ca3}</td>
         <td contenteditable="true" class="exam">${exam}</td>
         <td class="total">${total}</td>
       `;
@@ -189,9 +188,9 @@ const record = allScores.find(
         cell.addEventListener("input", () => {
           const ca1Val = parseFloat(row.querySelector(".ca1").innerText) || 0;
           const ca2Val = parseFloat(row.querySelector(".ca2").innerText) || 0;
-          const ca3Val = parseFloat(row.querySelector(".ca3").innerText) || 0;
+          // const ca3Val = parseFloat(row.querySelector(".ca3").innerText) || 0;
           const examVal = parseFloat(row.querySelector(".exam").innerText) || 0;
-          row.querySelector(".total").innerText = ca1Val + ca2Val + ca3Val + examVal;
+          row.querySelector(".total").innerText = ca1Val + ca2Val + examVal;
         });
         cell.addEventListener("blur", () => {
           updateSingleScore(termStoreName, sessionId, classId, subjectId, termValue, row);
@@ -233,9 +232,9 @@ function saveAllScores(termStoreName, sessionId, classId, subjectId) {
     const studentId = parseInt(row.dataset.studentId);
     const ca1 = parseFloat(row.querySelector(".ca1").innerText) || 0;
     const ca2 = parseFloat(row.querySelector(".ca2").innerText) || 0;
-    const ca3 = parseFloat(row.querySelector(".ca3").innerText) || 0;
+    // const ca3 = parseFloat(row.querySelector(".ca3").innerText) || 0;
     const exam = parseFloat(row.querySelector(".exam").innerText) || 0;
-    const total = ca1 + ca2 + ca3 + exam;
+    const total = ca1 + ca2 + exam;
 
     const term =
   termStoreName === "firstTerm" ? 1 : termStoreName === "secondTerm" ? 2 : 3;
@@ -248,7 +247,7 @@ const record = {
   term,
   ca1,
   ca2,
-  ca3,
+  // ca3,
   exam,
   total,
 };
@@ -288,9 +287,9 @@ function updateSingleScore(termStoreName, sessionId, classId, subjectId, term, r
   const studentId = parseInt(row.dataset.studentId);
   const ca1 = parseFloat(row.querySelector(".ca1").innerText) || 0;
   const ca2 = parseFloat(row.querySelector(".ca2").innerText) || 0;
-  const ca3 = parseFloat(row.querySelector(".ca3").innerText) || 0;
+  // const ca3 = parseFloat(row.querySelector(".ca3").innerText) || 0;
   const exam = parseFloat(row.querySelector(".exam").innerText) || 0;
-  const total = ca1 + ca2 + ca3 + exam;
+  const total = ca1 + ca2 + exam;
 
   const record = {
     studentID: studentId,
@@ -300,7 +299,7 @@ function updateSingleScore(termStoreName, sessionId, classId, subjectId, term, r
     term,
     ca1,
     ca2,
-    ca3,
+    // ca3,
     exam,
     total,
   };
